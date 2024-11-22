@@ -1,0 +1,38 @@
+services:
+  backend:
+    image: mikechatzis/hackatumtsichallenge:backend
+    ports:
+      - "8080:8080"
+    restart: no
+    depends_on:
+      - postgres
+  scenariorunner:
+    image: mikechatzis/hackatumtsichallenge:scenariorunner
+    ports:
+      - "8090:8090"
+    restart: always
+    depends_on:
+      - backend
+      - frontend
+      - postgres
+  postgres:
+    image: postgres:13-alpine
+    hostname: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tsi
+    ports:
+      - "5432:5432"
+    restart: no
+  frontend:
+    image: mikechatzis/hackatumtsichallenge:frontend
+    ports:
+      - "9000:9000"
+    restart: no
+    depends_on:
+      - backend
+
+networks:
+  default:
+    driver: bridge
