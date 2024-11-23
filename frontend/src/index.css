@@ -1,4 +1,5 @@
-/* @import url("leaflet/dist/leaflet.css"); */
+@import url('./assets/slider.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,5 +8,6 @@
 @layer base {
     body, * {
         color: #fff;
+        font-family: 'Poppins', sans-serif;
     }
 }
