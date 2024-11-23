@@ -1,5 +1,3 @@
-
-import { GridStack } from 'gridstack';
 import { useEffect, useState, useMemo } from 'react';
 import BarChart from '../charts/bar';
 import { faker } from '@faker-js/faker';
@@ -74,52 +72,54 @@ const Statistics = () => {
         datasets: [
             {
                 label: 'Avg. Fleet Efficiency',
-                data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+                data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
                 backgroundColor: 'rgba(231, 164, 150, 1)',
             },
             {
                 label: 'Avg. Operational',
-                data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+                data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
                 backgroundColor: 'rgba(225, 100, 73, 1)',
             },
             {
                 label: 'Avg. Env. Impact',
-                data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+                data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
                 backgroundColor: 'rgba(246, 236, 234, 1)',
             },
 
             {
                 label: 'Avg. General',
-                data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+                data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
                 backgroundColor: 'rgba(255, 255, 255, 0.7)',
             },
         ],
     };
-    ///
-    useEffect(() => {
-        GridStack.init();
-    }, []);
 
     return (
         <div className="w-full pl-[6rem] h-screen relative bg-charcoal-gray">
-            <div className="pt-[3rem] flex">
-                <h6>Simulation running for</h6>
-                <span className="pl-14">10 min 23 sec</span>
-            </div>
-            <div className="pt-[0.75rem]  flex">
-                <div className="w-28 rounded text-center font-bold cursor-pointer bg-burnt-coral"> <span>Stop</span></div>
-                <h6 className="pl-14">until</h6>
-                <span className="pl-14">21 minutes</span>
+            <div className='flex flex-col gap-y-2'>
+                <div className="pt-[3rem] flex gap-4">
+                    <h6 className='text-base'>Simulation running for</h6>
+                    <span>10 min 23 sec</span>
+                </div>
+                <div className="flex">
+                    <div className="w-28 rounded text-center font-bold cursor-pointer bg-primary-800"> 
+                        <span>Stop</span>
+                    </div>
+                    <div className='flex ml-7 gap-4'>
+                        <h6 className='text-base'>until</h6>
+                        <span>21 minutes</span>
+                    </div>
+                </div>
             </div>
             <div className='grid grid-cols-[1.25fr_0.85fr_0.85fr] pt-6 gap-x-2 w-[95%]'>
 
-                <div className="rounded-xl bg-dark-charcoal ">
-                    <div className="p-8 border-dark">
+                <div className="rounded-xl bg-dark-charcoal p-8 flex flex-col gap-2">
+                    <div className="border-dark">
                         <div className='rounded-xl p-4 bg-charcoal-gray'>
-                            <div className=""><BarChart data={data} /></div>
+                            <div className="h-[400px]"><BarChart data={data} /></div>
                             <div className='pl-8'>
-                                <h4 className='pt-4'>Statistics</h4>
-                                <div className='grid pt-2 grid-cols-2'>
+                                <h4 className='mt-1'>Statistics</h4>
+                                <div className='grid pt-1 grid-cols-2'>
                                     {statistics.statistics.map((data, index) =>
                                         <div key={index} className='flex gap-6'> <h6>{data.name}</h6> <h6>{`${data.value}%`}</h6></div>
                                     )
@@ -128,7 +128,7 @@ const Statistics = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="p-8 gap-2 grid-cols-2 grid border-dark">
+                    <div className="gap-2 grid-cols-2 grid border-dark">
                         <div className='rounded-xl p-8 bg-charcoal-gray'>
                             <div className=""><TimeChart {...selectedData.value} /></div>
                         </div>

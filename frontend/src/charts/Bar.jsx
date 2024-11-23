@@ -25,7 +25,7 @@ ChartJS.register(
 const BarChart = ({ data }) => {
     const options = {
         responsive: true,
-        // maintainAspectRatio: true,
+        maintainAspectRatio: false,
         // aspectRatio: 1,
         plugins: {
             legend: {
@@ -33,7 +33,9 @@ const BarChart = ({ data }) => {
             },
             title: {
                 display: true,
-                text: 'Stimulations',
+                text: 'Simulations',
+                position: 'right',
+                align: "center", 
             },
 
         },
