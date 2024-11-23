@@ -75,17 +75,17 @@ def mip_complete_route_assignment(scenario_id: str):
             print("No optimal solution found.")
             return
 
-        assignments = []
+        assignments = dict()
         for v in available_vehicles:
+            assignments[v.id] = []
             for c in customers_needing_service:
+                
                 if x[v.id, c.id].varValue == 1:
                     print(f"Assigning Vehicle {v.id} to Customer {c.id}.")
-                    assignments.append(VehicleUpdate(id=v.id, customerId=c.id))
+                    assignments[v.id].append(c.id)
                     v.coordX, v.coordY = c.destinationX, c.destinationY
-
-        if assignments:
-            update_scenario(scenario_id, assignments)
-            print("Assignments successfully updated.")
+            
+        return assignments
 
     except Exception as e:
         print(f"Error in MIP assignment: {e}")
