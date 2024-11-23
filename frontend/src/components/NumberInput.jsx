@@ -23,6 +23,7 @@ const NumberInput = ({ label, value, onChange, placeholder = "0", max = 100, cla
                 return;
             }
           }}
+          min={0}
           onChange={e => setNumber(+e.target.value)}
           placeholder={placeholder}
           max={max}
