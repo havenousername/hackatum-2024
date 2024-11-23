@@ -9,7 +9,6 @@ import NavBar from './components/NavBar';
 import 'leaflet/dist/leaflet.css';
 
 
-
 function App() {
   const [count, setCount] = useState(0)
 
