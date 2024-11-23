@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router";
 import { Chart } from 'react-charts'
 import { GridStack } from 'gridstack';
 import Parameters from '../components/Parameters';
-import MapComponent from '../map';
+import MapComponent from '../components/Map';
 import NavBar from '../components/NavBar';
 import 'leaflet/dist/leaflet.css';
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
-import LeafletListeners from './components/LeafletListeners';
-import carWithPersonIcon from "./assets/car-light-with-person.svg"
+import LeafletListeners from './LeafletListeners';
+import carWithPersonIcon from "../assets/car-light-with-person.svg"
 import { Icon } from 'leaflet';
 
 const customIcon = new Icon({
