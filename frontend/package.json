@@ -10,9 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.2.0",
+    "chart.js": "^4.4.6",
     "gridstack": "^11.1.0",
     "leaflet": "^1.9.4",
     "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
     "react-charts": "^3.0.0-beta.57",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",

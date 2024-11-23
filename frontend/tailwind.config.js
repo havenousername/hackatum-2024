@@ -16,6 +16,7 @@ export default {
         'charcoal-gray': '#2E2E2E',
         'burnt-coral': '#E16449',
         'grayish-brown' : '#4B4545',
+        'dark-charcoal' : '#3B3B3B',
         primary: {
           '400': '#EFBBB0',
           '800': '#E16449'
