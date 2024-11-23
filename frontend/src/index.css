@@ -1,4 +1,4 @@
-@import './assets/slider.css';
+@import url('./assets/slider.css');
 
 @tailwind base;
 @tailwind components;
