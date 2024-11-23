@@ -125,7 +125,7 @@ class Simulation():
         return used
 
     def taxi_finish_time(self, taxi):
-        t, route = self.last_taxi_route(taxi)
+        t, route = self.indexed_last_taxi_route(taxi)
         return t + route.duration
 
     def taxi_finished(self, taxi, t):

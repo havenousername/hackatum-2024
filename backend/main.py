@@ -1,18 +1,14 @@
 from greedy import greedy_vehicle_assignment
 from mip import mip_complete_route_assignment
 from backend_api import create_scenario, initialize_scenario, launch_scenario, get_scenario
-import threading
 from monitoring import *
-import time
+from simulation import Simulation
 
 
 NUMBER_OF_VEHICLES = 2
-
 NUMBER_OF_CUSTOMERS = 5
 
 
-
-    
 if __name__ == '__main__':
     # Step 1: Create a scenario with 2 vehicles and 2 customers
     try:
@@ -48,3 +44,8 @@ if __name__ == '__main__':
     scenario = get_scenario(scenario.id)
     customers = scenario.customers
     vehicles = scenario.vehicles
+
+    simulation = Simulation(vehicles, customers, mapping)
+    print(simulation.state(10000))
+    for taxi in vehicles:
+        print(simulation.taxi_finish_time(taxi))
