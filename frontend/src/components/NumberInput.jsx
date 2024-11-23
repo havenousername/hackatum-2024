@@ -28,8 +28,8 @@ const NumberInput = ({ label, value, onChange, placeholder = "0", max = 100, cla
           max={max}
           className="px-4 py-2 border border-t-0 border-x-0 border-b-1 bg-transparent outline-none  transition duration-200 ease-in-out max-h-[30px]"
           style={{
-            '-webkit-appearance': 'none',
-            '-moz-appearance': 'textfield',
+            'WebkitAppearance': 'none',
+            'MozAppearance': 'textfield',
             margin: '0px'
           }}
         />

@@ -1,0 +1,22 @@
+.leaflet-control-zoom-in span{
+    color: black;
+}
+
+.leaflet-control-zoom-out span{
+    color: black;
+}
+
+.leaflet-popup-content-wrapper {
+    padding: 0px !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0px !important;
+}
+
+.leaflet-popup-tip-container {
+    display: none;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+}
