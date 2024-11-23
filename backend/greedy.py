@@ -1,5 +1,5 @@
 import math
-from backend_api import get_vehicles_in_scenario, get_customers_in_scenario, update_scenario
+from backend_api import get_scenario, update_scenario
 from schemas import VehicleUpdate
 import time
 
@@ -16,8 +16,9 @@ def greedy_vehicle_assignment(scenario_id: str):
     """
     while True:
         try:
-            vehicles = get_vehicles_in_scenario(scenario_id)
-            customers = get_customers_in_scenario(scenario_id)
+            scenario = get_scenario(scenario_id)
+            vehicles = scenario.vehicles
+            customers = scenario.customers
 
             # Filter available vehicles and customers awaiting service
             available_vehicles = [v for v in vehicles if v.isAvailable]
@@ -46,13 +47,13 @@ def greedy_vehicle_assignment(scenario_id: str):
                     customers_needing_service.remove(nearest_customer)
                     available_vehicles.remove(vehicle)
 
-                    # Update the scenario with the assignments
-                    if assignments:
-                        update_scenario(scenario_id, assignments)
-                        print("Assignments successfully updated.")
+            # Update the scenario with the assignments
+            if assignments:
+                update_scenario(scenario_id, assignments)
+                print("Assignments successfully updated.")
 
         except Exception as e:
             print(f"Error in greedy assignment: {e}")
 
         # Sleep for a short time to allow vehicles to complete their trips
-        time.sleep(1)
+        time.sleep(3)

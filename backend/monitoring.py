@@ -10,8 +10,9 @@ def monitor_scenario(scenario_id: str):
     """
     while True:
         try:
-            vehicles = get_vehicles_in_scenario(scenario_id)
-            customers = get_customers_in_scenario(scenario_id)
+            scenario = get_scenario(scenario_id)
+            vehicles = scenario.vehicles
+            customers = scenario.customers
 
             print("\n--- Scenario Monitor ---")
             print(f"Vehicles in Scenario (ID: {scenario_id}):")
@@ -30,4 +31,4 @@ def monitor_scenario(scenario_id: str):
             print(f"Error in monitoring scenario: {e}")
 
         # Sleep for a few seconds before fetching data again
-        time.sleep(1)
+        time.sleep(3)
