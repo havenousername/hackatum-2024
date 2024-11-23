@@ -1,0 +1,4 @@
+.slider {
+    @apply w-full h-2 bg-white rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400;
+
+}
