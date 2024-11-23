@@ -28,7 +28,7 @@ export const options = {
         },
         title: {
             display: true,
-            text: 'Chart.js Bar Chart',
+            text: 'Stimulations',
         },
 
     },
@@ -46,20 +46,31 @@ export const options = {
     }
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+const labels = ['1st simulation', '2nd simulation', '3rd simulation'];
 
 export const data = {
     labels,
     datasets: [
         {
-            label: 'Dataset 1',
+            label: 'Avg. Fleet Efficiency',
             data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            backgroundColor: 'rgba(231, 164, 150, 1)',
         },
         {
-            label: 'Dataset 2',
+            label: 'Avg. Operational',
             data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            backgroundColor: 'rgba(225, 100, 73, 1)',
+        }, 
+        {
+            label: 'Avg. Env. Impact',
+            data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+            backgroundColor: 'rgba(246, 236, 234, 1)',
+        },
+        
+        {
+            label: 'Avg. General',
+            data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
         },
     ],
 };

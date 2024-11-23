@@ -36,7 +36,7 @@ const Statistics = () => {
                     <div className="p-8 border-dark">
                         <div className='rounded-xl p-4 bg-charcoal-gray'>
                             <div className=""><BarChart /></div>
-                            <div>
+                            <div className='pl-8'>
                                 <h4 className='pt-4'>Statistics</h4>
                                 <div className='grid pt-2 grid-cols-2'>
                                     {statistics.map((data, index) =>
