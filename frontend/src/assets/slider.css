@@ -1,0 +1,20 @@
+#range-slider {
+    @apply h-1;
+}
+
+#range-slider .range-slider__thumb[data-lower] {
+    @apply w-0;
+}
+
+#range-slider .range-slider__thumb[data-upper] {
+    @apply bg-primary-800;
+}
+
+#range-slider .range-slider__range {
+    @apply bg-primary-400;
+    @apply h-1;
+}
+
+#range-slider .range-slider__range {
+    border-radius: 6px;
+}
