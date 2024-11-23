@@ -1,4 +1,6 @@
 @import url('./assets/slider.css');
+@import url('./assets/leaflet.css');
+@import url('./assets/charts.css');
 
 @tailwind base;
 @tailwind components;
@@ -19,12 +21,3 @@
         font-size: 1rem;
     }
 }
-
-.leaflet-control-zoom-in span{
-    color: black;
-}
-
-.leaflet-control-zoom-out span{
-    color: black;
-}
-

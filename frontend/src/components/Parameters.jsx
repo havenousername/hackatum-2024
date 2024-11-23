@@ -13,7 +13,7 @@ const Parameters = ({ position }) => {
     const [pricePerKm, setPricePerKm] = useState({ value: 1, placeholder: '0', label: 'euro'  });
     
     return (
-        <div style={{  ...position }} className="bg-[#2E2E2E] rouded-xl absolute px-9 py-6 rounded-lg max-w-[550px] w-full z-[999]">
+        <div style={{  ...position }} className="bg-[#2E2E2E] rouded-xl absolute px-9 py-6 rounded-xl max-w-[550px] w-full z-[999]">
             <img src={shrinkIcon} alt="shrink icon" className="absolute right-6 top-6" />
             <h4 className="font-bold text-2xl pb-4">Parameters</h4>
             <div className="flex justify-between">

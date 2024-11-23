@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
+import { useState } from 'react';
+import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 import LeafletListeners from './LeafletListeners';
 import carWithPersonIconSource from "../assets/car-light-with-person.svg"
 import carIconSource from "../assets/car-light.svg"
@@ -55,16 +55,16 @@ const MapComponent = () => {
   const [customerDestinationPositions] = useState(Array.from({ length: 10 }).fill([]).map(_ => generateRandomPoint(center, ONE_KM)));
 
   return (
-    <MapContainer center={center} zoom={13} className='h-screen'>
+    <MapContainer id={'map'} center={center} zoom={13} className='h-screen'>
       <TileLayer
         url="https://cdn.lima-labs.com/{z}/{x}/{y}.png?api=demo"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
       />
       <LeafletListeners />
-      { carPositions.map((position, key) => <Marker key={key} position={position} icon={carIcon} />) }
+      { carPositions.map((position, key) => <Marker key={key} position={position} id={`car-positions-${key}`} icon={carIcon} />) }
       { customerPositions.map((position, key) => <Marker key={key} position={position} icon={customerIcon} />)}
       { customerWithCarsPositions.map((position, key) => <Marker key={key} position={position} icon={carWithPersonIcon} />)}
-      { customerDestinationPositions.map((position, key) => <Marker key={key} position={position} icon={customerDestinationIcon} />)}
+      { customerDestinationPositions.map((position, key) => <Marker key={key} position={position} icon={customerDestinationIcon} />)} 
     </MapContainer>
   );
 };
