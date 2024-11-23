@@ -1,25 +1,21 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { BrowserRouter } from "react-router";
-import { Chart } from 'react-charts'
-import { GridStack } from 'gridstack';
-import MapComponent from './components/Map';
 import NavBar from './components/NavBar';
+import { BrowserRouter, Routes, Route } from "react-router";
+import Home from './pages/Home';
+import Statistics from "./pages/Statistics";
 import 'leaflet/dist/leaflet.css';
 
-
+ 
 function App() {
-  const [count, setCount] = useState(0)
-
-  const position = [51.505, -0.09];
-
   return (
     <>
-      <NavBar/>
-      <MapComponent />
+    <BrowserRouter>
+    <NavBar/>
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/statistics" element={<Statistics/>} />
+      </Routes>
+    </BrowserRouter>
     </>
-
   )
 }
 
