@@ -1,5 +1,28 @@
 from greedy import greedy_vehicle_assignment
 from backend_api import create_scenario, initialize_scenario, launch_scenario
+import threading
+from monitoring import *
+import time
+
+
+
+# Start the threads
+def start_scenario_threads(scenario_id: str):
+    """
+    Start threads for monitoring the scenario and assigning vehicles to customers.
+    """
+    monitor_thread = threading.Thread(target=monitor_scenario, args=(scenario_id,), daemon=True)
+    assignment_thread = threading.Thread(target=greedy_vehicle_assignment, args=(scenario_id,), daemon=True)
+
+    monitor_thread.start()
+    assignment_thread.start()
+
+    # Keep the main thread alive
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("\nStopping threads...")
 
 # Step 1: Create a scenario with 2 vehicles and 2 customers
 try:
@@ -28,7 +51,7 @@ except Exception as e:
 # Step 4: Use the greedy algorithm to assign vehicles to customers
 
 try:
-    greedy_vehicle_assignment(scenario_id=str(scenario.id))
+    start_scenario_threads(scenario_id=str(scenario.id))
 except Exception as e:
-    print(f"Error running the greedy assignment: {e}")
+    print(f"Error running the threads: {e}")
     exit(1)
