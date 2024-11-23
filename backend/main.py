@@ -1,4 +1,5 @@
 from greedy import greedy_vehicle_assignment
+from mip import mip_complete_route_assignment
 from backend_api import create_scenario, initialize_scenario, launch_scenario
 import threading
 from monitoring import *
@@ -11,10 +12,11 @@ def start_scenario_threads(scenario_id: str):
     """
     Start threads for monitoring the scenario and assigning vehicles to customers.
     """
-    monitor_thread = threading.Thread(target=monitor_scenario, args=(scenario_id,), daemon=True)
-    assignment_thread = threading.Thread(target=greedy_vehicle_assignment, args=(scenario_id,), daemon=True)
+#    monitor_thread = threading.Thread(target=monitor_scenario, args=(scenario_id,), daemon=True)
+    #assignment_thread = threading.Thread(target=greedy_vehicle_assignment, args=(scenario_id,), daemon=True)
+    assignment_thread = threading.Thread(target=mip_complete_route_assignment, args=(scenario_id,), daemon=True)
 
-    monitor_thread.start()
+#    monitor_thread.start()
     assignment_thread.start()
 
     # Keep the main thread alive
@@ -26,7 +28,7 @@ def start_scenario_threads(scenario_id: str):
 
 # Step 1: Create a scenario with 2 vehicles and 2 customers
 try:
-    scenario = create_scenario(number_of_vehicles=2, number_of_customers=2)
+    scenario = create_scenario(number_of_vehicles=50, number_of_customers=200)
     print(f"Scenario created with ID: {scenario.id}")
 except Exception as e:
     print(f"Error creating scenario: {e}")

@@ -123,8 +123,6 @@ def get_scenario(scenario_id: str) -> Scenario:
     """
     url = f"{SCENARIO_URL}/Scenarios/get_scenario/{scenario_id}"  # Fixed endpoint
     response = requests.get(url)
-    print(f"Response Status: {response.status_code}")  # Debugging
-    print(f"Response Content: {response.text}")  # Debugging
     if response.status_code == 200:
         return Scenario.model_validate(response.json())  # Parse JSON into Scenario model
     else:
