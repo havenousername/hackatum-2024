@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "chartjs-adapter-date-fns": "^3.0.0",
+    "@faker-js/faker": "^9.2.0",
+    "chart.js": "^4.4.6",
     "gridstack": "^11.1.0",
     "leaflet": "^1.9.4",
     "react": "^18.3.1",
