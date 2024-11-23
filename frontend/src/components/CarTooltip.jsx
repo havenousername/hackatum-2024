@@ -1,14 +1,16 @@
-import { useEffect, useMemo, useState } from "react";
+import { useRef, useState } from "react";
 import TimeChart from "../charts/TimeChart.jsx";
 import Select from "react-select";
 import SingleSelect from "./SingleSelect.jsx";
+import {useClickAnyWhere} from "usehooks-ts";
 
-const CarTooltip = ({ isOpen }) => {
+const CarTooltip = ({ isOpen, setIsOpen }) => {
+    const ref = useRef(null);
     const [car] = useState({
         id: 'randomId',
         isAvailable: true,
         customer: 'customerId',
-        shortSummary: 'a car had more than 400 rides with 200 people',
+        shortSummary: 'A car had more than 400 rides with 200 people',
         mostImportantMetricks: {
             availability: '90%',
             energySpend: '30%',
@@ -21,7 +23,7 @@ const CarTooltip = ({ isOpen }) => {
             numberOfTrips: 499,
             errors: 2,
             averageTravelTime: '6min',
-            energyFootprint: '4% from norm'
+            energyFootprint: '4'
         }
     });
 
@@ -63,12 +65,18 @@ const CarTooltip = ({ isOpen }) => {
     const featureValue = { value: feature, label: capitalize(feature) };
     const timeFrameValue = { value: timeFrame, label: capitalize(timeFrame) };
 
+    useClickAnyWhere((event) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+            setIsOpen(false)
+        }
+    });
+
     if (!isOpen) {
         return null;
     }
 
     return (
-        <div className="bg-[#2E2E2E] p-10 absolute right-20 top-20 z-999 w-full max-w-[500px] rounded-2xl">
+        <div ref={ref} className="bg-[#2E2E2E] p-10 absolute right-20 top-20 z-999 w-full max-w-[500px] rounded-2xl">
             <div className="flex justify-between mb-4">
                 <h2 className="text-2xl font-bold">Car #{car.id}</h2>
                 <div className={`border font-bold border-1 px-14 py-1 ${car.isAvailable ? 'border-white' : ' border-primary-800'} rounded-xl`}>
@@ -93,6 +101,46 @@ const CarTooltip = ({ isOpen }) => {
                 }}  
                  getOptionValue={e => e.label}
                 />
+            </div>
+            <div className="mt-7">
+                <h3 className="text-xl font-bold">Short Summary</h3>
+                <h5 className="text-[#C0C0C0]">{car.shortSummary}</h5>
+            </div>
+            <div className="mt-7">
+                <h3 className="text-xl font-bold pb-2">Important metrics</h3>
+                <div className="flex justify-between">
+                    <div className="rounded-xl bg-[#242424] px-4 py-2 border-1 border-[#383434] border-solid flex gap-4 items-center basis-[48%]">
+                        <span className="font-bold text-[#C0C0C0]">Availability</span>
+                        <span className="text-[#C0C0C0] text-sm">{car.mostImportantMetricks.availability}</span>
+                    </div>
+                    <div className="rounded-xl bg-[#242424] px-4 py-2 border-1 border-[#383434] border-solid flex gap-4 items-center basis-[48%]">
+                        <span className="font-bold text-[#C0C0C0]">Energy Spend</span>
+                        <span className="text-[#C0C0C0] text-sm">{car.mostImportantMetricks.energySpend}</span>
+                    </div>
+                </div>
+            </div>
+            <div className="mt-7">
+                <h3 className="text-xl font-bold pb-2">Other metrics</h3>
+                <div className="flex justify-between">
+                    <div className="rounded-xl flex justify-between px-4 py-2 basis-[50%]">
+                        <span className="font-bold text-sm text-[#C0C0C0]">Number of trips</span>
+                        <span className="text-[#C0C0C0] text-sm">{car.metrics.numberOfTrips}</span>
+                    </div>
+                    <div className="rounded-xl border-solid flex justify-between px-4 py-2 basis-[50%]">
+                        <span className="font-bold text-[#C0C0C0] text-sm">Average travel time</span>
+                        <span className="text-[#C0C0C0] text-sm">{car.metrics.averageTravelTime}</span>
+                    </div>
+                </div>
+                <div className="flex justify-between">
+                    <div className="rounded-xl flex justify-between px-4 py-2 basis-[50%]">
+                        <span className="font-bold text-[#C0C0C0] text-sm">Errors of car</span>
+                        <span className="text-[#C0C0C0] text-sm">{car.metrics.errors}</span>
+                    </div>
+                    <div className="rounded-xl border-solid flex justify-between px-4 py-2 basis-[50%]">
+                        <span className="font-bold text-[#C0C0C0] text-sm">Energy footprint</span>
+                        <span className="text-[#C0C0C0] text-sm">{car.metrics.energyFootprint}</span>
+                    </div>
+                </div>
             </div>
         </div>
     );
