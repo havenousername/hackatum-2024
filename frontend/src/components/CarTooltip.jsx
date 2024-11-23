@@ -65,12 +65,15 @@ const CarTooltip = ({ isOpen, setIsOpen }) => {
     const featureValue = { value: feature, label: capitalize(feature) };
     const timeFrameValue = { value: timeFrame, label: capitalize(timeFrame) };
 
-    if (!isOpen) {
-        return null;
-    }
-
     return (
-        <div ref={ref} className="bg-[#2E2E2E] p-10 absolute right-20 top-20 z-999 w-full max-w-[500px] rounded-2xl">
+        <div
+         ref={ref} 
+         className={`bg-[#2E2E2E] p-10 absolute right-20 top-20 z-999 w-full max-w-[500px] rounded-2xl transition-all duration-300 transform ${
+            isOpen
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-4 pointer-events-none"
+          }`}
+         >
             <img alt="close" src={closeIcon} className="absolute right-5 top-4 w-[20px] cursor-pointer" onClick={() => setIsOpen(false)} />
             <div className="flex justify-between mb-4">
                 <h2 className="text-2xl font-bold">Car #{car.id}</h2>

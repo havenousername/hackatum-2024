@@ -12,10 +12,17 @@ const Parameters = ({ position }) => {
     const [startPrice, setStartPrice] = useState({ value: 10, placeholder: '0', label: 'euro'  });
     const [pricePerKm, setPricePerKm] = useState({ value: 1, placeholder: '0', label: 'euro'  });
     const [pricePerMin, setPricePerMin] = useState({ value: 1, placeholder: '0', label: 'euro'  });
+
+    const [isExpanded, setIsExpanded] = useState(true);
     
     return (
-        <div style={{  ...position }} className="bg-[#2E2E2E] rouded-xl absolute px-9 py-6 rounded-xl max-w-[550px] w-full z-[999]">
-            <img src={shrinkIcon} alt="shrink icon" className="absolute right-6 top-6" />
+        <>
+        <div style={{  ...position }} className={`bg-[#2E2E2E] rouded-xl absolute px-9 py-6 rounded-xl max-w-[550px] w-full z-[999] transition-all duration-300 transform ${
+            isExpanded
+              ? "opacity-100 scale-100"
+              : "opacity-0 scale-0  translate-y-0 pointer-events-none"
+          }`}>
+            <img src={shrinkIcon} alt="shrink icon" className="absolute right-6 top-6 cursor-pointer" onClick={() => setIsExpanded(false)} />
             <h4 className="font-bold text-2xl pb-4">Parameters</h4>
             <div className="flex justify-between">
                 <div className="flex flex-col gap-2 basis-[25%]">
@@ -75,6 +82,7 @@ const Parameters = ({ position }) => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
