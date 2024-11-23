@@ -6,6 +6,13 @@ export default {
   ],
   theme: {
     extend: {
+      zIndex: {
+        '999':'999'
+      },
+      colors:{
+        'charcoal-gray' : '#2E2E2E',
+        'burnt-coral' : '#E16449'
+      },
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
       },

@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router";
 import { Chart } from 'react-charts'
 import { GridStack } from 'gridstack';
 import MapComponent from './map';
+import NavBar from './components/NavBar';
 import 'leaflet/dist/leaflet.css';
 
 
@@ -16,8 +17,8 @@ function App() {
 
   return (
     <>
+      <NavBar/>
       <MapComponent />
-      <p className='text-3xl font-bold'>OmarAshour</p>
     </>
 
   )
