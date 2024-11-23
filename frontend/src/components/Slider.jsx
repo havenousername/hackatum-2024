@@ -14,7 +14,7 @@ const Slider = ({ min = 0, max = 100, step = 1, value = 50, onChange }) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full mx-0 py-3">
       <RangeSlider id='range-slider' min={min} max={max} step={step} value={[0, sliderValue]} onInput={(value) => {
         handleChange(value[1])
       }}/>
