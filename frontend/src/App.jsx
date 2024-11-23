@@ -5,8 +5,8 @@ import { BrowserRouter } from "react-router";
 import { Chart } from 'react-charts'
 import { GridStack } from 'gridstack';
 import MapComponent from './map';
+import Parameters from './components/Parameters';
 import 'leaflet/dist/leaflet.css';
-
 
 
 function App() {
