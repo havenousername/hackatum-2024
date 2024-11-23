@@ -38,14 +38,15 @@ const CarTooltip = ({ isOpen }) => {
 
     const options = useMemo(() => Object.keys(dataset).map(key => ({ 
         value: dataset[key],
-        label: key
+        label: `${key[0].toUpperCase()}${key.slice(1)}`
     })), [dataset]);
 
-    useEffect(() => {
-        console.log(options);
-    }, []);
-
     const [selectedData, setSelectedData] = useState(options[0]);
+
+
+    useEffect(() => {
+        console.log(selectedData);
+    }, [selectedData]);
 
     if (!isOpen) {
         return null;
@@ -60,12 +61,17 @@ const CarTooltip = ({ isOpen }) => {
                 </div>
             </div>
             <div className="rounded-3xl bg-[#252222] px-4 py-2 timechart-container">
-                <TimeChart {...selectedData} />
+                <TimeChart {...selectedData.value} />
             </div>
             <div>
-                <SingleSelect value={selectedData} options={options}  />
-                {/* <div className="max-w-[220px] w-full rounded-3xl">  
-                </div> */}
+                <SingleSelect
+                 value={selectedData} 
+                 options={options} 
+                 onChange={(data) => setSelectedData(data)}  
+                 labelKey='label'
+                 valueKey='value'
+                 getOptionValue={e => e.label}
+            />
             </div>
         </div>
     );
