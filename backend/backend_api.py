@@ -15,7 +15,7 @@ def get_customer(customer_id):
     url = f"{BASE_URL}/customers/{customer_id}"
     response = requests.get(url)
     if response.status_code == 200:
-        return Customer.parse_obj(response.json())  # Parse JSON into Customer model
+        return Customer.model_validate(response.json())  # Parse JSON into Customer model
     else:
         raise Exception(f"Error: {response.status_code}, {response.json()}")
 
@@ -24,7 +24,7 @@ def get_customers_in_scenario(scenario_id):
     url = f"{BASE_URL}/scenarios/{scenario_id}/customers"
     response = requests.get(url)
     if response.status_code == 200:
-        return [Customer.parse_obj(customer) for customer in response.json()]  # Parse into list of Customer models
+        return [Customer.model_validate(customer) for customer in response.json()]  # Parse into list of Customer models
     else:
         raise Exception(f"Error: {response.status_code}, {response.json()}")
 
@@ -33,7 +33,7 @@ def get_scenario_metadata(scenario_id):
     url = f"{BASE_URL}/scenario/{scenario_id}/metadata"
     response = requests.get(url)
     if response.status_code == 200:
-        return ScenarioMetadataDTO.parse_obj(response.json())  # Parse into ScenarioMetadataDTO model
+        return ScenarioMetadataDTO.model_validate(response.json())  # Parse into ScenarioMetadataDTO model
     else:
         raise Exception(f"Error: {response.status_code}, {response.json()}")
 
@@ -43,16 +43,16 @@ def get_all_scenarios():
     url = f"{BASE_URL}/scenarios"
     response = requests.get(url)
     if response.status_code == 200:
-        return [ScenarioMetadataDTO.parse_obj(scenario) for scenario in response.json()]  # Parse into list of ScenarioMetadataDTO models
+        return [ScenarioMetadataDTO.model_validate(scenario) for scenario in response.json()]  # Parse into list of ScenarioMetadataDTO models
     else:
         raise Exception(f"Error: {response.status_code}, {response.json()}")
 
 # Get a scenario by ID
-def get_scenario(scenario_id):
+def get_scenarios(scenario_id):
     url = f"{BASE_URL}/scenarios/{scenario_id}"
     response = requests.get(url)
     if response.status_code == 200:
-        return Scenario.parse_obj(response.json())  # Parse into Scenario model
+        return Scenario.model_validate(response.json())  # Parse into Scenario model
     else:
         raise Exception(f"Error: {response.status_code}, {response.json()}")
 
@@ -61,7 +61,7 @@ def get_vehicles_in_scenario(scenario_id):
     url = f"{BASE_URL}/scenarios/{scenario_id}/vehicles"
     response = requests.get(url)
     if response.status_code == 200:
-        return [Vehicle.parse_obj(vehicle) for vehicle in response.json()]  # Parse into list of Vehicle models
+        return [Vehicle.model_validate(vehicle) for vehicle in response.json()]  # Parse into list of Vehicle models
     else:
         raise Exception(f"Error: {response.status_code}, {response.json()}")
 
@@ -70,7 +70,7 @@ def get_vehicle(vehicle_id):
     url = f"{BASE_URL}/vehicles/{vehicle_id}"
     response = requests.get(url)
     if response.status_code == 200:
-        return Vehicle.parse_obj(response.json())  # Parse into Vehicle model
+        return Vehicle.model_validate(response.json())  # Parse into Vehicle model
     else:
         raise Exception(f"Error: {response.status_code}, {response.json()}")
 
@@ -98,7 +98,7 @@ def create_scenario(number_of_vehicles: int, number_of_customers: int) -> Scenar
     url = f"{BASE_URL}/scenario/create?numberOfVehicles={number_of_vehicles}&numberOfCustomers={number_of_customers}"
     response = requests.post(url)
     if response.status_code == 200:
-        return Scenario.parse_obj(response.json())  # Parse JSON into Scenario model
+        return Scenario.model_validate(response.json())  # Parse JSON into Scenario model
     else:
         raise Exception(f"Error {response.status_code}: {response.json()}")
 
@@ -116,17 +116,19 @@ def create_scenario(number_of_vehicles: int, number_of_customers: int) -> Scenar
 
 SCENARIO_URL = "http://localhost:8090"  # Your FastAPI server URL
 
-# Updated function to get a scenario by ID
+
 def get_scenario(scenario_id: str) -> Scenario:
     """
     Get scenario by ID and parse into Scenario model.
     """
-    url = f"{SCENARIO_URL}/scenarios/{scenario_id}"
+    url = f"{SCENARIO_URL}/Scenarios/get_scenario/{scenario_id}"  # Fixed endpoint
     response = requests.get(url)
+    print(f"Response Status: {response.status_code}")  # Debugging
+    print(f"Response Content: {response.text}")  # Debugging
     if response.status_code == 200:
-        return Scenario.parse_obj(response.json())  # Parse JSON into Scenario model
+        return Scenario.model_validate(response.json())  # Parse JSON into Scenario model
     else:
-        raise Exception(f"Error {response.status_code}: {response.json()}")
+        raise Exception(f"Error {response.status_code}: {response.text}")
 
 # Function to initialize a new scenario
 def initialize_scenario(payload: Scenario, db_scenario_id: Optional[str] = None):
@@ -167,6 +169,7 @@ def update_scenario(scenario_id: str, vehicles: List[VehicleUpdate]):
     response = requests.put(f"{SCENARIO_URL}/Scenarios/update_scenario/{scenario_id}", json=payload)
     
     if response.status_code == 200:
+        
         return response.json()  # Return parsed JSON response on success
     else:
         raise Exception(f"Error: {response.status_code}, {response.json()}")  # Raise exception on error
