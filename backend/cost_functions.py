@@ -111,7 +111,7 @@ def weighted_cost_function(taxi_coord, customer_coord, destination_coord,
     # TODO: Implement energy consumption cost
     energy_consumption = 0
 
-    total_cost = distance * weights.distance + duration * weights.duration + \
+    total_cost = distance * weights.distance + duration * weights.duration - \
         revenue * weights.revenue + energy_consumption * weights.energy_consumption
 
     return total_cost
