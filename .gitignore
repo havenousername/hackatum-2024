@@ -1,7 +1,8 @@
 .idea/
 .vscode/
 .DS_Store
-
+*.osm.pdf
+ors-docker/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
