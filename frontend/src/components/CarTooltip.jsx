@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import TimeChart from "../charts/TimeChart.jsx";
 import Select from "react-select";
 import SingleSelect from "./SingleSelect.jsx";
-import {useClickAnyWhere} from "usehooks-ts";
+import closeIcon from "../assets/close.svg";
 
 const CarTooltip = ({ isOpen, setIsOpen }) => {
     const ref = useRef(null);
@@ -65,18 +65,13 @@ const CarTooltip = ({ isOpen, setIsOpen }) => {
     const featureValue = { value: feature, label: capitalize(feature) };
     const timeFrameValue = { value: timeFrame, label: capitalize(timeFrame) };
 
-    useClickAnyWhere((event) => {
-        if (ref.current && !ref.current.contains(event.target)) {
-            setIsOpen(false)
-        }
-    });
-
     if (!isOpen) {
         return null;
     }
 
     return (
         <div ref={ref} className="bg-[#2E2E2E] p-10 absolute right-20 top-20 z-999 w-full max-w-[500px] rounded-2xl">
+            <img alt="close" src={closeIcon} className="absolute right-5 top-4 w-[20px] cursor-pointer" onClick={() => setIsOpen(false)} />
             <div className="flex justify-between mb-4">
                 <h2 className="text-2xl font-bold">Car #{car.id}</h2>
                 <div className={`border font-bold border-1 px-14 py-1 ${car.isAvailable ? 'border-white' : ' border-primary-800'} rounded-xl`}>

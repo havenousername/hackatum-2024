@@ -9,11 +9,15 @@ function Home() {
   const [parametersPosition] = useState({bottom: '5%', left: '5%'});
   const [isOpen, setIsOpen] = useState(true);
 
+  const onMapClickCar = () => {
+    setIsOpen(true);
+  }
+
   return (
     <div className='w-full h-screen relative'>
       <Parameters position={parametersPosition} />
       <CarTooltip isOpen={isOpen} setIsOpen={(isOpen) => setIsOpen(isOpen)} />
-      <MapComponent/>
+      <MapComponent onClickCar={onMapClickCar}/>
     </div>
   )
 }

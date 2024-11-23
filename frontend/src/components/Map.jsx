@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 import LeafletListeners from './LeafletListeners';
 import carWithPersonIconSource from "../assets/car-light-with-person.svg"
@@ -47,24 +47,38 @@ function generateRandomPoint([lat, lon], radius) {
 
 const ONE_KM = 1000;
 
-const MapComponent = () => {
+const MapComponent = ({ onClickCar }) => {
+  const [map, setMap] = useState(null);
   const [center] = useState([51.505, -0.09]);
   const [carPositions] = useState(Array.from({ length: 10 }).fill([]).map(_ => generateRandomPoint(center, ONE_KM)));
   const [customerPositions] = useState(Array.from({ length: 10 }).fill([]).map(_ => generateRandomPoint(center, ONE_KM)));
   const [customerWithCarsPositions] = useState(Array.from({ length: 10 }).fill([]).map(_ => generateRandomPoint(center, ONE_KM)));
   const [customerDestinationPositions] = useState(Array.from({ length: 10 }).fill([]).map(_ => generateRandomPoint(center, ONE_KM)));
 
+  useEffect(() => {
+      if (!map) {
+        return;
+      }
+      map.eachLayer(layer => {
+        if (layer.options?.alt?.includes('car_')) {
+          layer.on({
+            click: (event) => onClickCar(event, layer.options.alt),
+          })
+        }
+      })
+  }, [map]);
+
   return (
-    <MapContainer id={'map'} center={center} zoom={13} className='h-screen'>
+    <MapContainer ref={setMap} id={'map'} center={center} zoom={13} className='h-screen'>
       <TileLayer
         url="https://cdn.lima-labs.com/{z}/{x}/{y}.png?api=demo"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
       />
       <LeafletListeners />
-      { carPositions.map((position, key) => <Marker key={key} position={position} id={`car-positions-${key}`} icon={carIcon} />) }
-      { customerPositions.map((position, key) => <Marker key={key} position={position} icon={customerIcon} />)}
-      { customerWithCarsPositions.map((position, key) => <Marker key={key} position={position} icon={carWithPersonIcon} />)}
-      { customerDestinationPositions.map((position, key) => <Marker key={key} position={position} icon={customerDestinationIcon} />)} 
+      { carPositions.map((position, key) => <Marker alt={`car_${key}`} key={key} position={position} id={`car-positions-${key}`} icon={carIcon} />) }
+      { customerPositions.map((position, key) => <Marker alt={`customer_${key}`} key={key} position={position} icon={customerIcon} />)}
+      { customerWithCarsPositions.map((position, key) => <Marker alt={`car-with-customer_${key}`} key={key} position={position} icon={carWithPersonIcon} />)}
+      { customerDestinationPositions.map((position, key) => <Marker alt={`destination_${key}`} key={key} position={position} icon={customerDestinationIcon} />)} 
     </MapContainer>
   );
 };
