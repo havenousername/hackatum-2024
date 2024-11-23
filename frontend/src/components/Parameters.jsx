@@ -7,7 +7,7 @@ const Parameters = ({ position }) => {
     const [tradeoffTwo, setTradeoffTwo] = useState(20);
     
     return (
-        <div style={{  ...position }} className="bg-[#2E2E2E] rouded-xl absolute px-9 py-6 rounded-lg max-w-[550px] w-full">
+        <div style={{  ...position }} className="bg-[#2E2E2E] rouded-xl absolute px-9 py-6 rounded-lg max-w-[550px] w-full z-[999]">
             <img src={shrinkIcon} alt="shrink icon" className="absolute right-6 top-6" />
             <h4 className="font-bold text-2xl">Parameters</h4>
             <div className="py-2">
