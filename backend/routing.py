@@ -7,11 +7,11 @@ ORS_PORT = 12345
 
 class Route:
 
-    def __init__(self, coord0, coord1, do_preprocessing=True) -> None:
-        lat0, lon0 = coord0
-        lat1, lon1 = coord1
-        self.start_point = coord0
-        self.end_point = coord1
+    def __init__(self, origin, destination, do_preprocessing=True) -> None:
+        lat0, lon0 = origin
+        lat1, lon1 = destination
+        self.origin = origin
+        self.destination = destination
         url = f'http://localhost:{ORS_PORT}/ors/v2/directions/driving-car?start={lon0},{lat0}&end={lon1},{lat1}'
         response = requests.get(url)
 
@@ -20,7 +20,8 @@ class Route:
         else:
             raise Exception(f'Please fix/start the Openrouteservice. Error: {response.status_code}, {response.json()}')
 
-        self.duration = self.route['features'][0]['properties']['summary']['duration']
+        # ? Do we even need this cast?
+        self.duration = int(self.route['features'][0]['properties']['summary']['duration'])
         self.distance = self.route['features'][0]['properties']['summary']['distance']
         self.waypoints = [(lat, lon) for lon, lat in self.route['features'][0]['geometry']['coordinates']]
         self.waypoint_lookup_table = dict()
@@ -63,17 +64,17 @@ class Route:
 
     def position(self, t):
         if t < 0:
-            return self.start_point
+            return self.origin
         if t >= self.duration:
-            return self.end_point
+            return self.destination
         waypoint_id = self._time_to_waypoint_id(t)
         return self._waypoint_id_to_coords(waypoint_id)
 
 
 if __name__ == '__main__':
-    coord0 = (48.153095, 11.514132)
-    coord1 = (48.122337, 11.567343)
-    route = Route(coord0, coord1)
+    origin = (48.153095, 11.514132)
+    destination = (48.122337, 11.567343)
+    route = Route(origin, destination)
     print(f'Duration: {route.duration}')
     for t in [-1, 0, 1, 16, 123, 1000, 1235]:
         print(f'Position at time {t}: {route.position(t)}')
