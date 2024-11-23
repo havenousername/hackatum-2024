@@ -17,9 +17,9 @@ ORS_PORT = 12345
 
 # Default values used for normalization, just some guesses from edge to edge of the map
 MIN_DISTANCE = 0
-MAX_DISTANCE = 8000
+MAX_DISTANCE = 17000
 MIN_DURATION = 0
-MAX_DURATION = 1000
+MAX_DURATION = 2000
 
 def normalize(x, lower, upper):
     return (x - lower) / (upper - lower)
@@ -124,7 +124,7 @@ if __name__ == '__main__':
     coord1 = (48.122337, 11.567343)
 
 
-    munich_min_to_max = realistic_duration_and_distance(coord0, coord1)
+    munich_min_to_max = realistic_duration_and_distance(munich_min, munich_max)
     duration = munich_min_to_max['duration']
     distance = munich_min_to_max['distance']
     print(f'Munich min to max duration: {duration}s, suggested MAX: {MAX_DURATION}s')
