@@ -25,35 +25,50 @@ const CarTooltip = ({ isOpen }) => {
         }
     });
 
-    const [dataset] = useState({
-        hourly: {
-            data: [10, 15, 20, 35],
-            timeLabels: ["10:30", "10:40", "10:50", "11:00"],
+
+    const [features] = useState(['time', 'distance']);
+    const [timeframes] = useState(['hourly', 'daily']);
+
+    const [datasets] = useState({
+        time: {
+            hourly: {
+                data: [10, 15, 20, 35],
+                timeLabels: ["10:30", "10:40", "10:50", "11:00"],
+            },
+            daily: {
+                data: [190, 105, 200, 350],
+                timeLabels: ["10:30", "10:40", "10:50", "11:00"],
+            },
         },
-        daily: {
-            data: [190, 105, 200, 350],
-            timeLabels: ["10:30", "10:40", "10:50", "11:00"],
+        distance: {
+            hourly: {
+                data: [3, 40, 240, 305],
+                timeLabels: ["10:30", "10:40", "10:50", "11:00"],
+            },
+            daily: {
+                data: [1900, 1305, 2000, 1350],
+                timeLabels: ["10:30", "10:40", "10:50", "11:00"],
+            },
         },
     });
 
-    const options = useMemo(() => Object.keys(dataset).map(key => ({ 
-        value: dataset[key],
-        label: `${key[0].toUpperCase()}${key.slice(1)}`
-    })), [dataset]);
-
-    const [selectedData, setSelectedData] = useState(options[0]);
+    const [feature, setFeature] = useState(features[0]);
+    const [timeFrame, setTimeFrame] = useState(timeframes[0])
 
 
-    useEffect(() => {
-        console.log(selectedData);
-    }, [selectedData]);
+    const capitalize = (str) => {
+        return `${str[0].toUpperCase()}${str.slice(1)}`;
+    }
+    
+    const featureValue = { value: feature, label: capitalize(feature) };
+    const timeFrameValue = { value: timeFrame, label: capitalize(timeFrame) };
 
     if (!isOpen) {
         return null;
     }
 
     return (
-        <div className="bg-[#2E2E2E] p-10 absolute right-20 top-20 z-999 w-full max-w-[500px] rounded-xl">
+        <div className="bg-[#2E2E2E] p-10 absolute right-20 top-20 z-999 w-full max-w-[500px] rounded-2xl">
             <div className="flex justify-between mb-4">
                 <h2 className="text-2xl font-bold">Car #{car.id}</h2>
                 <div className={`border font-bold border-1 px-14 py-1 ${car.isAvailable ? 'border-white' : ' border-primary-800'} rounded-xl`}>
@@ -61,17 +76,23 @@ const CarTooltip = ({ isOpen }) => {
                 </div>
             </div>
             <div className="rounded-3xl bg-[#252222] px-4 py-2 timechart-container">
-                <TimeChart {...selectedData.value} />
+                <TimeChart {...datasets[feature][timeFrame]} />
             </div>
-            <div>
+            <div className="flex justify-evenly my-4">
                 <SingleSelect
-                 value={selectedData} 
-                 options={options} 
-                 onChange={(data) => setSelectedData(data)}  
-                 labelKey='label'
-                 valueKey='value'
+                 value={featureValue} 
+                 options={features.map(i => ({ value: i, label: capitalize(i) }))} 
+                 onChange={(data) => setFeature(data.value)}  
                  getOptionValue={e => e.label}
-            />
+                />
+                <SingleSelect
+                 value={timeFrameValue} 
+                 options={timeframes.map(i => ({ value: i, label: capitalize(i) }))} 
+                 onChange={(data) => {
+                    setTimeFrame(data.value)
+                }}  
+                 getOptionValue={e => e.label}
+                />
             </div>
         </div>
     );

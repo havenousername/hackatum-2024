@@ -9,7 +9,7 @@ const SingleSelect = ({ value, options, onChange, ...props }) => {
             value={value}
             options={options} 
             onChange={(v) => onChange(v)} 
-            className="max-w-[220px] w-full rounded-3xl bg-[#2E2E2E]"
+            className="max-w-[11rem] w-full rounded-3xl bg-[#2E2E2E]"
             {...props}
         />
     );
