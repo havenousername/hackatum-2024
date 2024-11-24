@@ -22,7 +22,11 @@ and **wait a few minutes, until the routing graph has fully compiled**
 
 ### Start the Backend
 
-Run `python websocket.py &` in the [`backend/` directory](./backend/).
+Now, you need to setup your python environment.
+Required packages are listed in the [`backend/requirements.txt` file](./backend/requirements.txt),
+you can use e.g. a virtual environment.
+Then run `python websocket.py &` in the [`backend/` directory](./backend/).
+(We might have made it easier, but we prioritized differently due to time constraints...)
 
 ### Start the Frontend
 
