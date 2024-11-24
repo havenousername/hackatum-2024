@@ -5,8 +5,8 @@ from monitoring import *
 from simulation import Simulation
 
 
-NUMBER_OF_VEHICLES = 2
-NUMBER_OF_CUSTOMERS = 5
+NUMBER_OF_VEHICLES = 100
+NUMBER_OF_CUSTOMERS = 500
 
 
 if __name__ == '__main__':
