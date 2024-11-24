@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import BarChart from '../charts/bar';
+import BarChart from '../charts/Bar';
 import { faker } from '@faker-js/faker';
 import TimeChart from '../charts/TimeChart';
 import PieChart from '../charts/PieChart';
