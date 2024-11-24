@@ -34,6 +34,8 @@ Go to the main directory which is ~/frontend
 
 Install the node_modules using `npm install`
 
+npm version >= 18
+
 Run the frontend using `npm run dev`
 
  
