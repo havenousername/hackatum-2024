@@ -42,7 +42,7 @@ class Simulation():
                 (customer.destinationX, customer.destinationY))
         return customer_routes
 
-    def indexed_taxi_route(self, taxi, t):
+    def _indexed_taxi_route(self, taxi, t):
         this_taxi_routes = self.taxi_routes[taxi.id]
         if this_taxi_routes == None or len(this_taxi_routes) == 0:
             return
@@ -54,20 +54,20 @@ class Simulation():
             correct_route = route
             correct_t = start_time
         elapsed = t - correct_t
-        return i, correct_route, elapsed
+        return i-1, correct_route, elapsed
 
-    def taxi_route(self, taxi, t):
-        _, correct_route, elapsed = self.indexed_taxi_route(taxi, t)
+    def _taxi_route(self, taxi, t):
+        _, correct_route, elapsed = self._indexed_taxi_route(taxi, t)
         return correct_route, elapsed
 
-    def indexed_taxi_of_customer(self, customer):
+    def _indexed_taxi_of_customer(self, customer):
         for taxi_id, customer_list in self.taxi_mapping.items():
             for i, customer_id in enumerate(customer_list):
                 if customer.id == customer_id:
                     return i, taxi_id
 
-    def customer_departure(self, customer):
-        i, taxi_id = self.indexed_taxi_of_customer(customer)
+    def _customer_departure(self, customer):
+        i, taxi_id = self._indexed_taxi_of_customer(customer)
         this_taxi_routes = self.taxi_routes[taxi_id]
         i = 2 * i + 1
         for departure in sorted(this_taxi_routes.keys()):
@@ -76,13 +76,13 @@ class Simulation():
             i -= 1
         return 0
 
-    def customer_waiting(self, customer, t):
-        return t < self.customer_departure(customer)
+    def _customer_waiting(self, customer, t):
+        return t < self._customer_departure(customer)
 
     def customer_pos_to_des(self, t):
         ret_list = []
         for customer in self.customers:
-            if not self.customer_waiting(customer, t):
+            if not self._customer_waiting(customer, t):
                 continue
             ret_list.append({
                 'id': customer.id,
@@ -92,53 +92,83 @@ class Simulation():
             })
         return ret_list
 
-    def indexed_last_taxi_route(self, taxi):
+    def _indexed_last_taxi_route(self, taxi):
         this_taxi_routes = self.taxi_routes[taxi.id]
         max_key = max(this_taxi_routes.keys())
         return max_key, this_taxi_routes[max_key]
 
-    def last_taxi_route(self, taxi):
-        _, route = self.indexed_last_taxi_route(taxi)
+    def _last_taxi_route(self, taxi):
+        _, route = self._indexed_last_taxi_route(taxi)
         return route
 
     def taxi_pos_to_des(self, t):
         ret_list = []
         for taxi in self.taxis:
-            if self.taxi_finished(taxi, t):
+            if self._taxi_finished(taxi, t):
                 ret_list.append({
                     'id': taxi.id,
-                    'position': self.last_taxi_route(taxi).destination,
+                    'position': self._last_taxi_route(taxi).destination,
                     'destination': (0,0),
                     'type': 'TAXI_WAITING',
                 })
                 continue
-            route, elapsed = self.taxi_route(taxi, t)
+            route, elapsed = self._taxi_route(taxi, t)
             ret_list.append({
                 'id': taxi.id,
                 'position': route.position(elapsed),
                 'destination': route.destination,
-                'type': 'TAXI_DRIVING_WITH_CUSTOMER' if self.taxi_in_use(taxi, t)
+                'type': 'TAXI_DRIVING_WITH_CUSTOMER' if self._taxi_in_use(taxi, t)
                     else 'TAXI_DRIVING_ALONE',
             })
         return ret_list
 
-    def taxi_in_use(self, taxi, t):
-        current_route, _ = self.taxi_route(taxi, t)
+    def _taxi_in_use(self, taxi, t):
+        current_route, _ = self._taxi_route(taxi, t)
         return current_route in self.customer_routes.values()
 
-    def used_taxis(self, t):
+    def _used_taxis(self, t):
         used = []
         for taxi in self.taxis:
-            if self.taxi_in_use(taxi, t):
+            if self._taxi_in_use(taxi, t):
                 used.append(taxi.id)
         return used
 
-    def taxi_finish_time(self, taxi):
-        t, route = self.indexed_last_taxi_route(taxi)
+    def _taxi_finish_time(self, taxi):
+        t, route = self._indexed_last_taxi_route(taxi)
         return t + route.duration
 
-    def taxi_finished(self, taxi, t):
-        return t >= self.taxi_finish_time(taxi)
+    def _taxi_finished(self, taxi, t):
+        return t >= self._taxi_finish_time(taxi)
+
+    def average_wait_time(self):
+        wait_time = 0
+        for customer in self.customers:
+            wait_time += self._customer_departure(customer)
+        avg_wait_time = wait_time / len(self.customers)
+        return avg_wait_time
+
+    def average_trip_duration(self):
+        trip_duration = 0
+        for customer_route in self.customer_routes.values():
+            trip_duration += customer_route.duration
+        avg_trip_duration = trip_duration / len(self.customers)
+        return avg_trip_duration
+
+    def average_total_customer_time(self):
+        return self.average_trip_duration() + self.average_wait_time()
+
+    def taxi_distance_traveled_until_t(self, taxi, t):
+        i, current_route, elapsed = self._indexed_taxi_route(taxi, t)
+        distance = current_route.distance_traveled(elapsed)
+        for route in [v for _, v in sorted(self.taxi_routes[taxi.id].items())][:i]:
+            distance += route.distance
+        return distance
+
+    def taxi_distance_traveled_graph_data_until_t(self, taxi, t):
+        ret_list = []
+        for t_step in range(max(0, t-1800), t):
+            ret_list.append(int(self.taxi_distance_traveled_until_t(taxi, t_step)))
+        return ret_list
 
     def state(self, t):
         # This method should return the current position of every taxi and
