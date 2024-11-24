@@ -80,15 +80,17 @@ class Simulation():
         return t < self.customer_departure(customer)
 
     def customer_pos_to_des(self, t):
-        ret_dict = dict()
+        ret_list = []
         for customer in self.customers:
             if not self.customer_waiting(customer, t):
                 continue
-            ret_dict[customer.id] = {
+            ret_list.append({
+                'id': customer.id,
                 'position': self.customer_routes[customer.id].origin,
                 'destination': self.customer_routes[customer.id].destination,
-            }
-        return ret_dict
+                'type': 'CUSTOMER_WAITING',
+            })
+        return ret_list
 
     def indexed_last_taxi_route(self, taxi):
         this_taxi_routes = self.taxi_routes[taxi.id]
@@ -100,27 +102,34 @@ class Simulation():
         return route
 
     def taxi_pos_to_des(self, t):
-        ret_dict = dict()
+        ret_list = []
         for taxi in self.taxis:
             if self.taxi_finished(taxi, t):
-                ret_dict[taxi.id] = {
+                ret_list.append({
+                    'id': taxi.id,
                     'position': self.last_taxi_route(taxi).destination,
-                    'available': True
-                }
+                    'destination': (0,0),
+                    'type': 'TAXI_WAITING',
+                })
                 continue
             route, elapsed = self.taxi_route(taxi, t)
-            ret_dict[taxi.id] = {
+            ret_list.append({
+                'id': taxi.id,
                 'position': route.position(elapsed),
                 'destination': route.destination,
-                'available': False
-            }
-        return ret_dict
+                'type': 'TAXI_DRIVING_WITH_CUSTOMER' if self.taxi_in_use(taxi, t)
+                    else 'TAXI_DRIVING_ALONE',
+            })
+        return ret_list
+
+    def taxi_in_use(self, taxi, t):
+        current_route, _ = self.taxi_route(taxi, t)
+        return current_route in self.customer_routes.values()
 
     def used_taxis(self, t):
         used = []
         for taxi in self.taxis:
-            i, _, _ = self.indexed_taxi_route(taxi, t)
-            if i % 2 == 1:
+            if self.taxi_in_use(taxi, t):
                 used.append(taxi.id)
         return used
 
@@ -138,12 +147,8 @@ class Simulation():
         # A customer will be in this return dictionary as long as they are not
         # yet in a taxi. As soon as they have entered a taxi, the taxi will be
         # marked as used and the customer will be "deleted"
-        ret_dict = {
-            'customer_pos_to_des': self.customer_pos_to_des(t),
-            'taxi_pos_to_des': self.taxi_pos_to_des(t),
-            'used_taxis': self.used_taxis(t),
-        }
-        return json.dumps(ret_dict)
+        ret_list = self.customer_pos_to_des(t) + self.taxi_pos_to_des(t)
+        return json.dumps(ret_list)
 
 
 if __name__ == '__main__':
