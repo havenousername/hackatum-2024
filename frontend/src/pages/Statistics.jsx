@@ -95,7 +95,7 @@ const Statistics = () => {
     };
 
     return (
-        <div className="w-full pl-[6rem] h-screen relative bg-charcoal-gray h-[100%] pb-6">
+        <div className="w-full pl-[6rem] relative bg-charcoal-gray h-[100%] pb-6">
             <div className='flex flex-col gap-y-2'>
                 <div className="pt-[3rem] flex gap-4">
                     <h6 className='text-base'>Simulation running for</h6>
@@ -183,7 +183,13 @@ const Statistics = () => {
                     </div>
                     <div className="rounded-xl p-8 bg-charcoal-gray ">
                         <div className="border-dark">
-                            <div className=""></div>
+                            <div className='text-center'>
+                                <h4 className="">General</h4>
+                                <h3>12K</h3>
+                                <h4>People Served</h4>
+                                <h3>129K</h3>
+                                <h4>Kilometers by fleet</h4>
+                            </div>
                         </div>
                     </div>
 
