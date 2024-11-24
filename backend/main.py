@@ -48,4 +48,4 @@ if __name__ == '__main__':
     print(f'Average total customer time: {simulation.average_total_customer_time()}')
     t = 300
     print(f'Graph data until {t}: {simulation.taxi_distance_traveled_graph_data_until_t(vehicles[0], t)}')
-    print(f'Remaining waypoints at {t} for some taxi: {simulation.remaining_current_waypoints(vehicles[0], t)}')
+    print(f'Remaining waypoints at {t} for some taxi: {simulation.remaining_current_waypoints_taxi(vehicles[0], t)}')
