@@ -170,13 +170,15 @@ class Simulation():
             ret_list.append(int(self.taxi_distance_traveled_until_t(taxi, t_step)))
         return ret_list
 
-    def remaining_current_waypoints_customer(self, customer_id):
+    def _remaining_current_waypoints_customer(self, customer_id):
         return self.customer_routes[customer_id].waypoints
 
-    def remaining_current_waypoints_customers(self):
+    def remaining_current_waypoints_customers(self, t):
         ret_list = []
         for customer in self.customers:
-            ret_list.append(self.remaining_current_waypoints_customer(customer.id))
+            if not self._customer_waiting(customer, t):
+                continue
+            ret_list.append(self._remaining_current_waypoints_customer(customer.id))
         return ret_list
 
     def remaining_current_waypoints_taxi(self, taxi_id, t):

@@ -1,14 +1,15 @@
 from pulp import LpProblem, LpVariable, lpSum, LpMinimize, PULP_CBC_CMD
-from backend_api import get_scenario, update_scenario
-from schemas import VehicleUpdate
+from backend_api import get_scenario
 import math
+from cost_functions import Weights, weighted_cost_function
 
 # Cost function provided (replace your distance/time/energy/revenue calculation)
 def cost_function(x1, y1, x2, y2):
     return math.hypot(x1 - x2, y1 - y2)
 
 
-def mip_complete_route_assignment(scenario_id: str):
+def mip_complete_route_assignment(scenario_id: str, weights=Weights(1,1,1,0),
+        constant_fee=0, fee_per_km=0, fee_per_min=0):
     try:
         # Fetch scenario data
         scenario = get_scenario(scenario_id)
@@ -40,7 +41,10 @@ def mip_complete_route_assignment(scenario_id: str):
 
         # Cost matrix
         cost = {
-            (v.id, c.id): cost_function(v.coordX, v.coordY, c.destinationX, c.destinationY)
+#            (v.id, c.id): cost_function(v.coordX, v.coordY, c.destinationX, c.destinationY)
+            (v.id, c.id): weighted_cost_function((v.coordX,v.coordY), (c.coordX,c.coordY),
+                    (c.destinationX,c.destinationY), weights, constant_fee,
+                    fee_per_km, fee_per_min)
             for v in available_vehicles
             for c in customers_needing_service
         }
