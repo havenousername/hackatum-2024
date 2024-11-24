@@ -10,9 +10,12 @@ function Home() {
   const [parametersPosition] = useState({ bottom: '5%', left: '5%' });
   const [isOpen, setIsOpen] = useState(true);
   const [isExpanded, setIsExpanded] = useState(true);
+  const [selectedCar, setSelectedCar] = useState(null);
 
-  const onMapClickCar = () => {
+  const onMapClickCar = (car) => {
+    console.log(car);
     setIsOpen(true);
+    setSelectedCar(car)
   }
 
   return (
