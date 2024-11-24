@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Slider from "./Slider.jsx";
 import shrinkIcon from "../assets/shrink.svg"
 import NumberInput from "./NumberInput.jsx";
 import useBackendConnection from "../api/useBackendConnection.jsx";
+import useDebounce from "../hooks/useDebounce.jsx";
 
 
 const Parameters = ({ position, isExpanded, setIsExpanded}) => {
@@ -16,12 +17,59 @@ const Parameters = ({ position, isExpanded, setIsExpanded}) => {
     const [pricePerKm, setPricePerKm] = useState({ value: 1, placeholder: '0', label: 'euro'  });
     const [pricePerMin, setPricePerMin] = useState({ value: 1, placeholder: '0', label: 'euro'  });
 
-    const parameters = { time, distance, revenue, energy };
+
+    useEffect(() => {
+        backendConnection.createSubscription('parameters');
+    }, []);
+
+    const isFirstUpload = backendConnection.lastJsonMessage && Object.keys(backendConnection.lastJsonMessage).length > 0 && backendConnection.messageHistory.length < 3;
+
+    const [updatedFromBackend, setUpdatedFromBackend] = useState(false);
+    useEffect(() => {
+        if (isFirstUpload) {
+            setTime(backendConnection.lastJsonMessage.parameters.weights.duration * 100);
+            setDistance(backendConnection.lastJsonMessage.parameters.weights.distance * 100);
+            setEnergy(backendConnection.lastJsonMessage.parameters.weights.energyConsumption * 100);
+            setRevenue(backendConnection.lastJsonMessage.parameters.weights.revenue * 100);
+
+            setStartPrice(p => ({ value: backendConnection.lastJsonMessage.parameters.financialConstraints.startPrice, ...p }));
+            setPricePerMin(p => ({ value: backendConnection.lastJsonMessage.parameters.financialConstraints.pricePerMin, ...p  }));
+            setPricePerKm(p => ({ value: backendConnection.lastJsonMessage.parameters.financialConstraints.pricePerKm, ...p }));
+            setUpdatedFromBackend(true);
+        }
+    }, [isFirstUpload]);
+
+
+    const timeD = useDebounce(time);
+    const distanceD = useDebounce(distance);
+    const revenueD = useDebounce(revenue);
+    const energyD = useDebounce(energy);
+
+    const startPriceD = useDebounce(startPrice.value);
+    const pricePerKmD = useDebounce(pricePerKm.value);
+    const pricePerMinD = useDebounce(pricePerMin.value);
 
 
     useEffect(() => {
-        backendConnection.sendJsonMessage({ update: parameters })
-    }, [time]);
+        if (updatedFromBackend) {
+            const parameters = { 
+                "weights": {
+                    "duration": timeD / 100,
+                    "distance": distanceD / 100,
+                    "energyConsumption": energyD / 100,
+                    "revenue": revenueD / 100
+                },
+                "financialConstraints": {
+                    "startPrice": startPriceD,
+                    "pricePerKm": pricePerKmD,
+                    "pricePerMin": pricePerMinD
+                }
+            }
+            backendConnection.sendJsonMessage({ parameters, update: 'parameters' });
+        }
+    }, [updatedFromBackend, timeD, distanceD, revenueD, energyD, startPriceD, pricePerKmD, pricePerMinD]);
+
+
     
     return (
         <>
@@ -80,13 +128,13 @@ const Parameters = ({ position, isExpanded, setIsExpanded}) => {
             <div className="py-2">
                 <Slider value={revenue} onChange={(value) => setRevenue(value)} />
                 <div className="flex justify-between">
-                    <h6>Time</h6>
+                    <h6>Revenue</h6>
                 </div>
             </div>
             <div className="py-2">
                 <Slider value={energy} onChange={(value) => setEnergy(value)} />
                 <div className="flex justify-between">
-                    <h6>Renenue</h6>
+                    <h6>Energy</h6>
                 </div>
             </div>
         </div>

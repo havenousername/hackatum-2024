@@ -117,13 +117,7 @@ const MapComponent = ({ onClickCar }) => {
     }
   }, [realTimeData]);
 
-  useEffect(() => {
-    
-  }, [realTimeData]);
 
-  useEffect(() => {
-    console.log(carPositions);
-  }, [carPositions]);
 
   // useEffect(() => {
   //   if (firstLoad) {
