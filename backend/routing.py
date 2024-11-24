@@ -73,6 +73,10 @@ class Route:
             distance += self._distance_between(i, i+1)
         return distance
 
+    def remaining_waypoints(self, t):
+        current_waypoint = self._time_to_waypoint_id(t)
+        return self.waypoints[current_waypoint:]
+
     def distance_traveled(self, t):
         return self._distance_sum_until_waypoint(self._time_to_waypoint_id(t))
 

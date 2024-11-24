@@ -5,8 +5,8 @@ from backend_api import create_scenario, initialize_scenario, launch_scenario, g
 from monitoring import *
 
 
-NUMBER_OF_VEHICLES = 100
-NUMBER_OF_CUSTOMERS = 500
+NUMBER_OF_VEHICLES = 5
+NUMBER_OF_CUSTOMERS = 20
 
 
 def create_scenario_with_api_call(num_vehicles, num_customers):
@@ -48,3 +48,4 @@ if __name__ == '__main__':
     print(f'Average total customer time: {simulation.average_total_customer_time()}')
     t = 300
     print(f'Graph data until {t}: {simulation.taxi_distance_traveled_graph_data_until_t(vehicles[0], t)}')
+    print(f'Remaining waypoints at {t} for some taxi: {simulation.remaining_current_waypoints(vehicles[0], t)}')
