@@ -1,6 +1,7 @@
 from pulp import LpProblem, LpVariable, lpSum, LpMinimize, PULP_CBC_CMD
 from backend_api import get_scenario
 import math
+from jsondata_adapter import JsonDataAdapter
 from cost_functions import Weights, weighted_cost_function
 
 # Cost function provided (replace your distance/time/energy/revenue calculation)
@@ -8,8 +9,17 @@ def cost_function(x1, y1, x2, y2):
     return math.hypot(x1 - x2, y1 - y2)
 
 
-def mip_complete_route_assignment(scenario_id: str, weights=Weights(1,1,1,0),
-        constant_fee=0, fee_per_km=0, fee_per_min=0):
+def mip_complete_route_assignment(scenario_id: str, weights=None,
+        constant_fee=None, fee_per_km=None, fee_per_min=None):
+    if weights == None:
+        adapter = JsonDataAdapter('parameters.json')
+        weights = adapter.get('weights')
+        weights = Weights(weights['distance'], weights['duration'],
+                weights['revenue'], weights['energyConsumption'])
+        financial_constraints = adapter.get('financialConstraints')
+        constant_fee = financial_constraints['startPrice']
+        fee_per_km = financial_constraints['pricePerKm']
+        fee_per_min = financial_constraints['pricePerMin']
     try:
         # Fetch scenario data
         scenario = get_scenario(scenario_id)
