@@ -173,6 +173,12 @@ class Simulation():
     def remaining_current_waypoints_customer(self, customer_id):
         return self.customer_routes[customer_id].waypoints
 
+    def remaining_current_waypoints_customers(self):
+        ret_list = []
+        for customer in self.customers:
+            ret_list.append(self.remaining_current_waypoints_customer(customer.id))
+        return ret_list
+
     def remaining_current_waypoints_taxi(self, taxi_id, t):
         taxi = None
         for taxi in self.taxis:
@@ -180,6 +186,12 @@ class Simulation():
                 break
         current_route, elapsed = self._taxi_route(taxi, t)
         return current_route.remaining_waypoints(elapsed)
+
+    def remaining_current_waypoints_taxis(self, t):
+        ret_list = []
+        for taxi in self.taxis:
+            ret_list.append(self.remaining_current_waypoints_taxi(taxi.id, t))
+        return ret_list
 
     def state(self, t):
         # This method should return the current position of every taxi and

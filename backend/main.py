@@ -49,3 +49,4 @@ if __name__ == '__main__':
     t = 300
     print(f'Graph data until {t}: {simulation.taxi_distance_traveled_graph_data_until_t(vehicles[0], t)}')
     print(f'Remaining waypoints at {t} for some taxi: {simulation.remaining_current_waypoints_taxi(vehicles[0], t)}')
+    # print(f'Remaining waypoints at {t} for some taxi: {simulation.remaining_current_waypoints_taxis(t)}')
