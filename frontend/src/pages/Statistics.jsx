@@ -3,6 +3,7 @@ import BarChart from '../charts/bar';
 import { faker } from '@faker-js/faker';
 import TimeChart from '../charts/TimeChart';
 import PieChart from '../charts/PieChart';
+import Simulation from '../components/Simulation';
 const Statistics = () => {
 
     const [statistics, _] = useState(
@@ -96,23 +97,8 @@ const Statistics = () => {
 
     return (
         <div className="w-full pl-[6rem] relative bg-charcoal-gray h-[100%] pb-6">
-            <div className='flex flex-col gap-y-2'>
-                <div className="pt-[3rem] flex gap-4">
-                    <h6 className='text-base'>Simulation running for</h6>
-                    <span>10 min 23 sec</span>
-                </div>
-                <div className="flex">
-                    <div className="w-28 rounded text-center font-bold cursor-pointer bg-primary-800">
-                        <span>Stop</span>
-                    </div>
-                    <div className='flex ml-7 gap-4'>
-                        <h6 className='text-base'>until</h6>
-                        <span>21 minutes</span>
-                    </div>
-                </div>
-            </div>
-            <div className='grid grid-cols-[1.25fr_0.85fr_0.85fr] pt-6 gap-x-2 w-[95%]'>
-
+            <Simulation />
+            <div className='grid grid-cols-[1.25fr_0.85fr_0.85fr] pt-6 gap-x-2 w-[95%]' style={{ paddingTop: '6rem' }}>
                 <div className="rounded-xl bg-dark-charcoal p-8 flex flex-col gap-2">
                     <div className="border-dark">
                         <div className='rounded-xl p-8 bg-charcoal-gray'>

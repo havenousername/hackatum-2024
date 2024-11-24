@@ -51,16 +51,9 @@ const ONE_KM = 1000;
 
 const useRealTimeSimilationData = () => {
   const realTimeSimulation = useRealTimeSimulation();
-
-  useEffect(() => {
-    realTimeSimulation.createScenario(5, 11);
-    realTimeSimulation.createSubscription('customerPosition');
-    realTimeSimulation.createSubscription('carPosition')
-  }, []);
-
   const firstLoad = realTimeSimulation.messageHistory.at(-2) && realTimeSimulation.messageHistory.at(-2) === null;
 
-  return [realTimeSimulation.lastJsonMessage,  ];
+  return [realTimeSimulation.lastJsonMessage, firstLoad];
 }
 
 const findCentralPoint = (customers, cars) => {
