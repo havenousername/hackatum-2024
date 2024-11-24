@@ -1,51 +1,81 @@
 import requests
+from pydantic import BaseModel, Field
+from typing import List, Optional
+from uuid import UUID
+from schemas import *
 
-BASE_URL = "http://localhost:8090"
+BASE_URL = "http://localhost:8080"
 
-# Example function to get customer by ID
+
+
+######   GET METHODS   ######
+
+# Get customer by ID
 def get_customer(customer_id):
     url = f"{BASE_URL}/customers/{customer_id}"
     response = requests.get(url)
     if response.status_code == 200:
-        print("Customer data:", response.json())
+        return Customer.model_validate(response.json())  # Parse JSON into Customer model
     else:
-        print("Error:", response.json())
+        raise Exception(f"Error: {response.status_code}, {response.json()}")
 
-# Example function to get all customers in a scenario
+# Get all customers in a scenario
 def get_customers_in_scenario(scenario_id):
     url = f"{BASE_URL}/scenarios/{scenario_id}/customers"
     response = requests.get(url)
     if response.status_code == 200:
-        print("Customers in Scenario:", response.json())
+        return [Customer.model_validate(customer) for customer in response.json()]  # Parse into list of Customer models
     else:
-        print("Error:", response.json())
+        raise Exception(f"Error: {response.status_code}, {response.json()}")
 
-# Example function to get metadata for a scenario
+# Get metadata for a scenario
 def get_scenario_metadata(scenario_id):
     url = f"{BASE_URL}/scenario/{scenario_id}/metadata"
     response = requests.get(url)
     if response.status_code == 200:
-        print("Scenario Metadata:", response.json())
+        return ScenarioMetadataDTO.model_validate(response.json())  # Parse into ScenarioMetadataDTO model
     else:
-        print("Error:", response.json())
+        raise Exception(f"Error: {response.status_code}, {response.json()}")
 
-# Example function to create a scenario
-def create_scenario(number_of_vehicles, number_of_customers):
-    url = f"{BASE_URL}/scenario/create?numberOfVehicles={number_of_vehicles}&numberOfCustomers={number_of_customers}"
-    response = requests.post(url)
-    if response.status_code == 200:
-        print("Scenario created:", response.json())
-    else:
-        print("Error:", response.json())
 
-# Example function to get all scenarios
+# Get all scenarios
 def get_all_scenarios():
     url = f"{BASE_URL}/scenarios"
     response = requests.get(url)
     if response.status_code == 200:
-        print("All Scenarios:", response.json())
+        return [ScenarioMetadataDTO.model_validate(scenario) for scenario in response.json()]  # Parse into list of ScenarioMetadataDTO models
     else:
-        print("Error:", response.json())
+        raise Exception(f"Error: {response.status_code}, {response.json()}")
+
+# Get a scenario by ID
+def get_scenarios(scenario_id):
+    url = f"{BASE_URL}/scenarios/{scenario_id}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return Scenario.model_validate(response.json())  # Parse into Scenario model
+    else:
+        raise Exception(f"Error: {response.status_code}, {response.json()}")
+
+# Get all vehicles in a scenario
+def get_vehicles_in_scenario(scenario_id):
+    url = f"{BASE_URL}/scenarios/{scenario_id}/vehicles"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return [Vehicle.model_validate(vehicle) for vehicle in response.json()]  # Parse into list of Vehicle models
+    else:
+        raise Exception(f"Error: {response.status_code}, {response.json()}")
+
+# Get a vehicle by ID
+def get_vehicle(vehicle_id):
+    url = f"{BASE_URL}/vehicles/{vehicle_id}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return Vehicle.model_validate(response.json())  # Parse into Vehicle model
+    else:
+        raise Exception(f"Error: {response.status_code}, {response.json()}")
+
+
+######   DELETE AND PUT METHODS   ######
 
 # Example function to delete a scenario by ID
 def delete_scenario(scenario_id):
@@ -56,63 +86,98 @@ def delete_scenario(scenario_id):
     else:
         print("Error:", response.json())
 
-# Example function to get a scenario by ID
-def get_scenario(scenario_id):
-    url = f"{BASE_URL}/scenarios/{scenario_id}"
+
+def create_scenario(number_of_vehicles: int, number_of_customers: int) -> Scenario:
+    """
+    Create a new random scenario with the specified number of vehicles and customers.
+
+    :param number_of_vehicles: Number of vehicles in the scenario.
+    :param number_of_customers: Number of customers in the scenario.
+    :return: Parsed response as a Scenario object.
+    """
+    url = f"{BASE_URL}/scenario/create?numberOfVehicles={number_of_vehicles}&numberOfCustomers={number_of_customers}"
+    response = requests.post(url)
+    if response.status_code == 200:
+        return Scenario.model_validate(response.json())  # Parse JSON into Scenario model
+    else:
+        raise Exception(f"Error {response.status_code}: {response.json()}")
+
+
+
+#######################################################################################################################################################
+
+
+#########################               SCENARIO_RUNNER          ######################################################################################
+
+
+#######################################################################################################################################################
+
+
+
+SCENARIO_URL = "http://localhost:8090"  # Your FastAPI server URL
+
+
+def get_scenario(scenario_id: str) -> Scenario:
+    """
+    Get scenario by ID and parse into Scenario model.
+    """
+    url = f"{SCENARIO_URL}/Scenarios/get_scenario/{scenario_id}"  # Fixed endpoint
     response = requests.get(url)
     if response.status_code == 200:
-        print("Scenario data:", response.json())
+        return Scenario.model_validate(response.json())  # Parse JSON into Scenario model
     else:
-        print("Error:", response.json())
+        raise Exception(f"Error {response.status_code}: {response.text}")
 
-# Example function to get all vehicles in a scenario
-def get_vehicles_in_scenario(scenario_id):
-    url = f"{BASE_URL}/scenarios/{scenario_id}/vehicles"
-    response = requests.get(url)
+# Function to initialize a new scenario
+def initialize_scenario(payload: Scenario, db_scenario_id: Optional[str] = None):
+    """
+    Initialize a new scenario with the provided payload and optional database scenario ID.
+    
+    :param payload: Scenario object containing the initialization details.
+    :param db_scenario_id: Optional ID of the scenario in the database.
+    :return: Parsed response as a dictionary or raises an exception on error.
+    """
+    # Prepare query parameters if db_scenario_id is provided
+    params = {"db_scenario_id": db_scenario_id} if db_scenario_id else {}
+    
+    # Convert the Scenario object to a dictionary for the JSON body
+    payload_dict = payload.dict()
+    
+    # Send the POST request
+    response = requests.post(f"{SCENARIO_URL}/Scenarios/initialize_scenario", json=payload_dict, params=params)
+    
     if response.status_code == 200:
-        print("Vehicles in Scenario:", response.json())
+        return response.json()  # Return parsed JSON response on success
     else:
-        print("Error:", response.json())
+        raise Exception(f"Error: {response.status_code}, {response.json()}")  # Raise exception on error
 
-# Example function to get a vehicle by ID
-def get_vehicle(vehicle_id):
-    url = f"{BASE_URL}/vehicles/{vehicle_id}"
-    response = requests.get(url)
+
+def update_scenario(scenario_id: str, vehicles: List[VehicleUpdate]):
+    """
+    Update a scenario with the provided vehicle updates.
+    
+    :param scenario_id: ID of the scenario to update.
+    :param vehicles: List of VehicleUpdate objects representing updated vehicle assignments.
+    :return: Parsed response as a dictionary or raises an exception on error.
+    """
+    # Create the payload using the UpdateScenario model
+    payload = UpdateScenario(vehicles=vehicles).dict()  # Convert to dictionary for the JSON body
+    
+    # Send the PUT request
+    response = requests.put(f"{SCENARIO_URL}/Scenarios/update_scenario/{scenario_id}", json=payload)
+    
     if response.status_code == 200:
-        print("Vehicle data:", response.json())
+        
+        return response.json()  # Return parsed JSON response on success
     else:
-        print("Error:", response.json())
+        raise Exception(f"Error: {response.status_code}, {response.json()}")  # Raise exception on error
 
-# Example usage
-if __name__ == "__main__":
-    # Replace with actual IDs for testing
-    customer_id = "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-    scenario_id = "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-    vehicle_id = "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-    
-    # Get customer data
-    get_customer(customer_id)
-    
-    # Get all customers in a scenario
-    get_customers_in_scenario(scenario_id)
-    
-    # Get scenario metadata
-    get_scenario_metadata(scenario_id)
-    
-    # Create a new scenario
-    create_scenario(5, 10)  # Create a scenario with 5 vehicles and 10 customers
-    
-    # Get all scenarios
-    get_all_scenarios()
-    
-    # Delete a scenario
-    delete_scenario(scenario_id)
-    
-    # Get a specific scenario
-    get_scenario(scenario_id)
-    
-    # Get all vehicles in a scenario
-    get_vehicles_in_scenario(scenario_id)
-    
-    # Get vehicle data
-    get_vehicle(vehicle_id)
+# Function to launch a scenario with a specific speed
+def launch_scenario(scenario_id, speed=0.2):
+    params = {"speed": speed}
+    response = requests.post(f"{SCENARIO_URL}/Runner/launch_scenario/{scenario_id}", params=params)
+    if response.status_code == 200:
+        return response.json()  # Return JSON response on success
+    else:
+        return f"Error: {response.status_code}"
+
