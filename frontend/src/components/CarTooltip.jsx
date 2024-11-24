@@ -1,60 +1,60 @@
 import { useEffect, useRef, useState } from "react";
 import TimeChart from "../charts/TimeChart.jsx";
-import Select from "react-select";
 import SingleSelect from "./SingleSelect.jsx";
 import closeIcon from "../assets/close.svg";
+import { faker } from "@faker-js/faker";
 
 const CarTooltip = ({ isOpen, setIsOpen, selectedCar }) => {
     const ref = useRef(null);
 
 
-    const [car] = useState({
-        id: selectedCar?.id ?? 'ID',
-        isAvailable:  selectedCar?.type && selectedCar?.type  === "TAXI_DRIVING_ALONE" ? true : false,
-        customer: 'customerId',
-        shortSummary: 'A car had more than 400 rides with 200 people',
+    const car = {
+        id: faker.string.uuid(), // Use faker.string.uuid() for unique IDs
+        isAvailable: faker.datatype.boolean(),
+        customer: faker.person.firstName(), // Updated API for names
+        shortSummary: faker.lorem.sentence(),
         mostImportantMetricks: {
-            availability: ``,
-            energySpend: '30%',
+            availability: `${faker.number.int({ min: 80, max: 100 })}%`, // Updated for numbers
+            energySpend: `${faker.number.int({ min: 10, max: 50 })}%`,
         },
         metrics: {
             distance: {
-                withCustomer: '80%',
-                without: '20%'
+                withCustomer: `${faker.number.int({ min: 50, max: 90 })}%`,
+                without: `${faker.number.int({ min: 10, max: 50 })}%`,
             },
-            numberOfTrips: 499,
-            errors: 2,
-            averageTravelTime: '6min',
-            energyFootprint: '4'
-        }
-    });
+            numberOfTrips: faker.number.int({ min: 100, max: 1000 }),
+            errors: faker.number.int({ min: 0, max: 10 }),
+            averageTravelTime: `${faker.number.int({ min: 5, max: 20 })} min`,
+            energyFootprint: faker.number.int({ min: 1, max: 10 }).toString(),
+        },
+    };
 
 
     const [features] = useState(['time', 'distance']);
     const [timeframes] = useState(['hourly', 'daily']);
 
-    const [datasets] = useState({
+    const datasets = {
         time: {
             hourly: {
-                data: [10, 15, 20, 35],
+                data: Array.from({ length: 4 }, () => faker.number.int({ min: 5, max: 50 })),
                 timeLabels: ["10:30", "10:40", "10:50", "11:00"],
             },
             daily: {
-                data: [190, 105, 200, 350],
-                timeLabels: ["10:30", "10:40", "10:50", "11:00"],
+                data: Array.from({ length: 4 }, () => faker.number.int({ min: 1, max: 1000 })),
+                timeLabels: ["Sunday", "Monday", "Tuesday", "Wednesday"],
             },
         },
         distance: {
             hourly: {
-                data: [3, 40, 240, 305],
+                data: Array.from({ length: 4 }, () => faker.number.int({ min: 1, max: 100 })),
                 timeLabels: ["10:30", "10:40", "10:50", "11:00"],
             },
             daily: {
-                data: [1900, 1305, 2000, 1350],
-                timeLabels: ["10:30", "10:40", "10:50", "11:00"],
+                data: Array.from({ length: 4 }, () => faker.number.int({ min: 1000, max: 2000 })),
+                timeLabels: ["Sunday", "Monday", "Tuesday", "Wednesday"],
             },
         },
-    });
+    };
 
     const [feature, setFeature] = useState(features[0]);
     const [timeFrame, setTimeFrame] = useState(timeframes[0])
@@ -69,9 +69,6 @@ const CarTooltip = ({ isOpen, setIsOpen, selectedCar }) => {
 
 
     const isAvailable = selectedCar?.type  === "TAXI_DRIVING_ALONE" ? true : false;
-    useEffect(() => {
-        console.log(selectedCar)
-    }, []);
 
     return (
         <div
@@ -90,7 +87,7 @@ const CarTooltip = ({ isOpen, setIsOpen, selectedCar }) => {
                 </div>
             </div>
             <div className="rounded-3xl bg-[#252222] px-4 py-2 timechart-container">
-                <TimeChart {...datasets[feature][timeFrame]} />
+                {datasets[feature] && <TimeChart {...datasets[feature][timeFrame]} />}
             </div>
             <div className="flex justify-evenly my-4">
                 <SingleSelect
