@@ -24,7 +24,7 @@ const Statistics = () => {
         }
     }
     const [statistics, setStatistics] = useState(fakeStatistics());
-    
+
     const fakeDataSet = () => {
         return {
             hourly: {
@@ -95,7 +95,9 @@ const Statistics = () => {
 
     return (
         <div className="w-full pl-[6rem] relative bg-charcoal-gray h-[100%] pb-6">
-            <Simulation />
+            <div className='py-4'>
+                <Simulation />
+            </div>
             <div className='grid grid-cols-[1.25fr_0.85fr_0.85fr] pt-6 gap-x-2 w-[95%]' style={{ paddingTop: '6rem' }}>
                 <div className="rounded-xl bg-dark-charcoal p-8 flex flex-col gap-2">
                     <div className="border-dark">
