@@ -5,57 +5,40 @@ import TimeChart from '../charts/TimeChart';
 import PieChart from '../charts/PieChart';
 import Simulation from '../components/Simulation';
 const Statistics = () => {
-
-    const [statistics, _] = useState(
-        {
+    const fakeStatistics = () => {
+       return  {
             statistics: [
-                { name: 'Avg. Fleet Efficiency', value: 56 },
-                { name: 'Avg. Operational', value: 99.99 },
-                { name: 'Avg. Env. Impact', value: 56 },
-                { name: 'Avg. General', value: 80.9 }
+                { name: 'Avg. Fleet Efficiency', value: faker.number.float({ min: 50, max: 100, precision: 0.01 }) },
+                { name: 'Avg. Operational', value: faker.number.float({ min: 90, max: 100, precision: 0.01 }) },
+                { name: 'Avg. Env. Impact', value: faker.number.float({ min: 40, max: 60, precision: 0.01 }) },
+                { name: 'Avg. General', value: faker.number.float({ min: 60, max: 90, precision: 0.01 }) }
             ],
             customer: [
-                { name: 'Avg. Waiting Time', value: 5 },
-                { name: 'Avg. Spent Time', value: 12 }
+                { name: 'Avg. Waiting Time', value: faker.number.int({ min: 1, max: 20 }) },
+                { name: 'Avg. Spent Time', value: faker.number.int({ min: 5, max: 30 }) }
             ],
             fleet: [
-                { name: 'Avg. Customer Time', value: 4 },
-                { name: 'Avg. Spent Time', value: 12 }
+                { name: 'Avg. Customer Time', value: faker.number.int({ min: 1, max: 10 }) },
+                { name: 'Avg. Spent Time', value: faker.number.int({ min: 5, max: 20 }) }
             ]
         }
-    );
-    //fakedata for timechart
-    const [car] = useState({
-        id: 'randomId',
-        isAvailable: true,
-        customer: 'customerId',
-        shortSummary: 'a car had more than 400 rides with 200 people',
-        mostImportantMetricks: {
-            availability: '90%',
-            energySpend: '30%',
-        },
-        metrics: {
-            distance: {
-                withCustomer: '80%',
-                without: '20%'
+    }
+    const [statistics, setStatistics] = useState(fakeStatistics());
+    
+    const fakeDataSet = () => {
+        return {
+            hourly: {
+                data: [faker.number.int({ min: 0, max: 100 }), faker.number.int({ min: 0, max: 100 }), faker.number.int({ min: 0, max: 100 }), faker.number.int({ min: 0, max: 100 })],
+                timeLabels: ["10:30", "10:40", "10:50", "11:00"],
             },
-            numberOfTrips: 499,
-            errors: 2,
-            averageTravelTime: '6min',
-            energyFootprint: '4% from norm'
-        }
-    });
+            daily: {
+                data: [faker.number.int({ min: 0, max: 100 }), faker.number.int({ min: 0, max: 100 }), faker.number.int({ min: 0, max: 100 }), faker.number.int({ min: 0, max: 100 })],
+                timeLabels: ["10:30", "10:40", "10:50", "11:00"],
+            },
+        };
+    }
 
-    const [dataset] = useState({
-        hourly: {
-            data: [10, 15, 20, 35],
-            timeLabels: ["10:30", "10:40", "10:50", "11:00"],
-        },
-        daily: {
-            data: [190, 105, 200, 350],
-            timeLabels: ["10:30", "10:40", "10:50", "11:00"],
-        },
-    });
+    const [dataset, setDataSet] = useState(fakeDataSet());
 
     const options = useMemo(() => Object.keys(dataset).map(key => ({
         value: dataset[key],
@@ -68,32 +51,47 @@ const Statistics = () => {
 
     //fakedata for barchart
     const labels = ['1st simulation', '2nd simulation', '3rd simulation'];
-    const data = {
-        labels,
-        datasets: [
-            {
-                label: 'Avg. Fleet Efficiency',
-                data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
-                backgroundColor: 'rgba(231, 164, 150, 1)',
-            },
-            {
-                label: 'Avg. Operational',
-                data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
-                backgroundColor: 'rgba(225, 100, 73, 1)',
-            },
-            {
-                label: 'Avg. Env. Impact',
-                data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
-                backgroundColor: 'rgba(246, 236, 234, 1)',
-            },
 
-            {
-                label: 'Avg. General',
-                data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
-                backgroundColor: 'rgba(255, 255, 255, 0.7)',
-            },
-        ],
-    };
+    const fakerDataGen = () => {
+        return {
+            labels,
+            datasets: [
+                {
+                    label: 'Avg. Fleet Efficiency',
+                    data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
+                    backgroundColor: 'rgba(231, 164, 150, 1)',
+                },
+                {
+                    label: 'Avg. Operational',
+                    data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
+                    backgroundColor: 'rgba(225, 100, 73, 1)',
+                },
+                {
+                    label: 'Avg. Env. Impact',
+                    data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
+                    backgroundColor: 'rgba(246, 236, 234, 1)',
+                },
+    
+                {
+                    label: 'Avg. General',
+                    data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
+                    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                },
+            ],
+        }
+    }
+
+
+    const [data, setData] = useState(fakerDataGen());
+
+
+    useEffect(() => {
+        setInterval(() => {
+            setData(fakerDataGen());
+            setStatistics(fakeStatistics());
+            setDataSet(fakeDataSet());
+        }, 1800)
+    }, []);
 
     return (
         <div className="w-full pl-[6rem] relative bg-charcoal-gray h-[100%] pb-6">
