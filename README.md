@@ -19,6 +19,8 @@ _If you are using a non-unix OS, you might have to follow the steps in the_
 _[`setup.sh`](./openrouteservice/setup.sh) on your own, i.e. make directories,_
 _copy the config and download the dataset at the provided link._
 
+**If you are using Windows, try to use the Windows-Subsystem for Linux to run the setup script!**
+
 Then run `docker-compose up -d` in the [`openroutesystem/` directory](./openroutesystem/)
 and **wait a few minutes, until the routing graph has fully compiled**
 (it is compiling as long as there is a file called
