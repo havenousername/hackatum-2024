@@ -7,6 +7,7 @@ import destinationIconSource from "../assets/destination-light.svg"
 import customerIconSource from '../assets/person-light.svg'
 import { Icon } from 'leaflet';
 import '../assets/overlay.css';
+import {useRealTimeSimulation} from "../api/useBackendConnection";
 
 const customerIcon = new Icon({
   iconUrl: customerIconSource, 
@@ -47,13 +48,88 @@ function generateRandomPoint([lat, lon], radius) {
 
 const ONE_KM = 1000;
 
+
+const useRealTimeSimilationData = () => {
+  const realTimeSimulation = useRealTimeSimulation();
+
+  useEffect(() => {
+    realTimeSimulation.createScenario(5, 11);
+    realTimeSimulation.createSubscription('customerPosition');
+    realTimeSimulation.createSubscription('carPosition')
+  }, []);
+
+  const firstLoad = realTimeSimulation.messageHistory.at(-2) && realTimeSimulation.messageHistory.at(-2) === null;
+
+  return [realTimeSimulation.lastJsonMessage,  ];
+}
+
+const findCentralPoint = (customers, cars) => {
+
+  const customerPoints = customers.map(c => c.position);
+  const customerDest = customers.map(c => c.destination);
+  const carsPoints = cars.map(c => c.position);
+  const carsDestinations = cars.map(c => c.destination);
+
+
+  const allPoints = [...customerPoints, ...customerDest, ...carsPoints, ...carsDestinations]
+  const sum = allPoints
+      .reduce((a, b) => [a[0] + b[0], a[1] + b[1]], [0, 0]);
+
+  return [sum[0] / allPoints.length, sum[1] / allPoints.length];
+}
+
+const BOOKED_TAXI = 'TAXI_DRIVING_WITH_CUSTOMER'
+
+
 const MapComponent = ({ onClickCar }) => {
   const [map, setMap] = useState(null);
-  const [center] = useState([51.505, -0.09]);
-  const [carPositions] = useState(Array.from({ length: 10 }).fill([]).map(_ => generateRandomPoint(center, ONE_KM)));
-  const [customerPositions] = useState(Array.from({ length: 10 }).fill([]).map(_ => generateRandomPoint(center, ONE_KM)));
-  const [customerWithCarsPositions] = useState(Array.from({ length: 10 }).fill([]).map(_ => generateRandomPoint(center, ONE_KM)));
-  const [customerDestinationPositions] = useState(Array.from({ length: 10 }).fill([]).map(_ => generateRandomPoint(center, ONE_KM)));
+  const [center, setCenter] = useState([48.137154, 11.576124]);
+  const [carPositions, setCarPositions] = useState([]);
+  const [customersPositions, setCustomersPositions] = useState([]);
+  const [customerWithCarsPositions, setCustomerWithCarsPositions] = useState([]);
+  const [customerDestinationPositions] = useState([])
+
+  const [realTimeData, firstLoad] = useRealTimeSimilationData();
+  useEffect(() => {
+    if (!realTimeData || !realTimeData.carsPosition) {
+      return;
+    }
+  
+    const { carsPosition, customerPosition } = realTimeData;
+  
+    let bookedTaxis = [];
+    const freeTaxis = [];
+    
+    carsPosition.forEach(c => {
+      if (c.type === BOOKED_TAXI) {
+        bookedTaxis.push(c);
+      } else {
+        freeTaxis.push(c);
+      }
+    });
+
+  
+    setCarPositions(freeTaxis.map(c => c.position));
+    setCustomerWithCarsPositions(bookedTaxis.map(c => c.position));
+  
+    if (customerPosition) {
+      setCustomersPositions(customerPosition.map(cp => cp.position));
+    }
+  }, [realTimeData]);
+
+  useEffect(() => {
+    
+  }, [realTimeData]);
+
+  useEffect(() => {
+    console.log(carPositions);
+  }, [carPositions]);
+
+  // useEffect(() => {
+  //   if (firstLoad) {
+  //     setCenter(findCentralPoint());
+  //   }
+  // }, [firstLoad]);
 
   useEffect(() => {
       if (!map) {
@@ -76,7 +152,7 @@ const MapComponent = ({ onClickCar }) => {
       />
       <LeafletListeners />
       { carPositions.map((position, key) => <Marker alt={`car_${key}`} key={key} position={position} id={`car-positions-${key}`} icon={carIcon} />) }
-      { customerPositions.map((position, key) => <Marker alt={`customer_${key}`} key={key} position={position} icon={customerIcon} />)}
+      { customersPositions.map((position, key) => <Marker alt={`customer_${key}`} key={key} position={position} icon={customerIcon} />)}
       { customerWithCarsPositions.map((position, key) => <Marker alt={`car-with-customer_${key}`} key={key} position={position} icon={carWithPersonIcon} />)}
       { customerDestinationPositions.map((position, key) => <Marker alt={`destination_${key}`} key={key} position={position} icon={customerDestinationIcon} />)} 
     </MapContainer>

@@ -7,7 +7,7 @@ import json
 from main import create_scenario_with_api_call, calculate_mapping, Simulation
 
 PORT = 9876
-UPDATE_INTERVAL = 1
+UPDATE_INTERVAL = 0.1
 
 
 class WebSimulationServer:
