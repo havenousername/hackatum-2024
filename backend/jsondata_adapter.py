@@ -3,6 +3,7 @@ import json
 
 class JsonDataAdapter:
     def __init__(self, filename):
+        self.filename = filename
         if not os.path.exists(self.filename):
             with open(self.filename, 'w') as f:
                 json.dump({}, f)
