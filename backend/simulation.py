@@ -79,7 +79,7 @@ class Simulation():
     def _customer_waiting(self, customer, t):
         return t < self._customer_departure(customer)
 
-    def _customer_pos_to_des(self, t):
+    def customer_pos_to_des(self, t):
         ret_list = []
         for customer in self.customers:
             if not self._customer_waiting(customer, t):
@@ -101,7 +101,7 @@ class Simulation():
         _, route = self._indexed_last_taxi_route(taxi)
         return route
 
-    def _taxi_pos_to_des(self, t):
+    def taxi_pos_to_des(self, t):
         ret_list = []
         for taxi in self.taxis:
             if self._taxi_finished(taxi, t):
