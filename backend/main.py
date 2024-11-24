@@ -3,7 +3,6 @@ from greedy import greedy_vehicle_assignment
 from mip import mip_complete_route_assignment
 from backend_api import create_scenario, initialize_scenario, launch_scenario, get_scenario
 from monitoring import *
-from websocket import main
 
 
 NUMBER_OF_VEHICLES = 100
