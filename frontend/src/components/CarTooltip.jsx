@@ -1,18 +1,20 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TimeChart from "../charts/TimeChart.jsx";
 import Select from "react-select";
 import SingleSelect from "./SingleSelect.jsx";
 import closeIcon from "../assets/close.svg";
 
-const CarTooltip = ({ isOpen, setIsOpen }) => {
+const CarTooltip = ({ isOpen, setIsOpen, selectedCar }) => {
     const ref = useRef(null);
+
+
     const [car] = useState({
-        id: 'randomId',
-        isAvailable: true,
+        id: selectedCar?.id ?? 'ID',
+        isAvailable:  selectedCar?.type && selectedCar?.type  === "TAXI_DRIVING_ALONE" ? true : false,
         customer: 'customerId',
         shortSummary: 'A car had more than 400 rides with 200 people',
         mostImportantMetricks: {
-            availability: '90%',
+            availability: ``,
             energySpend: '30%',
         },
         metrics: {
@@ -65,6 +67,12 @@ const CarTooltip = ({ isOpen, setIsOpen }) => {
     const featureValue = { value: feature, label: capitalize(feature) };
     const timeFrameValue = { value: timeFrame, label: capitalize(timeFrame) };
 
+
+    const isAvailable = selectedCar?.type  === "TAXI_DRIVING_ALONE" ? true : false;
+    useEffect(() => {
+        console.log(selectedCar)
+    }, []);
+
     return (
         <div
          ref={ref} 
@@ -76,9 +84,9 @@ const CarTooltip = ({ isOpen, setIsOpen }) => {
          >
             <img alt="close" src={closeIcon} className="absolute right-5 top-4 w-[20px] cursor-pointer" onClick={() => setIsOpen(false)} />
             <div className="flex justify-between mb-4">
-                <h2 className="text-2xl font-bold">Car #{car.id}</h2>
-                <div className={`border font-bold border-1 px-14 py-1 ${car.isAvailable ? 'border-white' : ' border-primary-800'} rounded-xl`}>
-                    { car.isAvailable ? 'Available' : 'Busy' }
+                <h2 className="text-2xl font-bold">Car #{selectedCar?.id.slice(0, 5) + '...' ?? car.id}</h2>
+                <div className={`border font-bold border-1 px-14 py-1 ${ isAvailable ? 'border-white' : ' border-primary-800'} rounded-xl`}>
+                    { isAvailable ? 'Available' : 'Busy' }
                 </div>
             </div>
             <div className="rounded-3xl bg-[#252222] px-4 py-2 timechart-container">
