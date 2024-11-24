@@ -54,7 +54,7 @@ class Simulation():
             correct_route = route
             correct_t = start_time
         elapsed = t - correct_t
-        return i, correct_route, elapsed
+        return i-1, correct_route, elapsed
 
     def _taxi_route(self, taxi, t):
         _, correct_route, elapsed = self._indexed_taxi_route(taxi, t)
@@ -157,6 +157,19 @@ class Simulation():
     def average_total_customer_time(self):
         return self.average_trip_duration() + self.average_wait_time()
 
+    def taxi_distance_traveled_until_t(self, taxi, t):
+        i, current_route, elapsed = self._indexed_taxi_route(taxi, t)
+        distance = current_route.distance_traveled(elapsed)
+        for route in [v for _, v in sorted(self.taxi_routes[taxi.id].items())][:i]:
+            distance += route.distance
+        return distance
+
+    def taxi_distance_traveled_graph_data_until_t(self, taxi, t):
+        ret_list = []
+        for t_step in range(max(0, t-1800), t):
+            ret_list.append(int(self.taxi_distance_traveled_until_t(taxi, t_step)))
+        return ret_list
+
     def state(self, t):
         # This method should return the current position of every taxi and
         # customer (and additional info maybe later on). As a JSON!
@@ -164,7 +177,7 @@ class Simulation():
         # A customer will be in this return dictionary as long as they are not
         # yet in a taxi. As soon as they have entered a taxi, the taxi will be
         # marked as used and the customer will be "deleted"
-        ret_list = self._customer_pos_to_des(t) + self._taxi_pos_to_des(t)
+        ret_list = self.customer_pos_to_des(t) + self.taxi_pos_to_des(t)
         return json.dumps(ret_list)
 
 

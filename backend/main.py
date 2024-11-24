@@ -47,3 +47,5 @@ if __name__ == '__main__':
     print(f'Average wait time: {simulation.average_wait_time()}')
     print(f'Average trip duration: {simulation.average_trip_duration()}')
     print(f'Average total customer time: {simulation.average_total_customer_time()}')
+    t = 300
+    print(f'Graph data until {t}: {simulation.taxi_distance_traveled_graph_data_until_t(vehicles[0], t)}')

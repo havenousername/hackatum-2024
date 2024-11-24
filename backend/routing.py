@@ -1,4 +1,5 @@
 import requests
+from cost_functions import L2_distance
 import math
 
 
@@ -61,6 +62,19 @@ class Route:
         if t >= self.duration:
             return 0
         return self.duration - t
+
+    def _distance_between(self, waypoint_id_from, waypoint_id_to):
+        return L2_distance(self._waypoint_id_to_coords(waypoint_id_from),
+                self._waypoint_id_to_coords(waypoint_id_to))
+
+    def _distance_sum_until_waypoint(self, waypoint_id):
+        distance = 0
+        for i in range(waypoint_id+1):
+            distance += self._distance_between(i, i+1)
+        return distance
+
+    def distance_traveled(self, t):
+        return self._distance_sum_until_waypoint(self._time_to_waypoint_id(t))
 
     def position(self, t):
         if t < 0:
