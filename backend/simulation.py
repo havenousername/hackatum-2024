@@ -170,6 +170,17 @@ class Simulation():
             ret_list.append(int(self.taxi_distance_traveled_until_t(taxi, t_step)))
         return ret_list
 
+    def remaining_current_waypoints_customer(self, customer):
+        return self.customer_routes[customer.id].waypoints
+
+    def remaining_current_waypoints_taxi(self, taxi_id, t):
+        taxi = None
+        for taxi in self.taxis:
+            if taxi.id == taxi_id:
+                break
+        current_route, elapsed = self._taxi_route(taxi, t)
+        return current_route.remaining_waypoints(elapsed)
+
     def state(self, t):
         # This method should return the current position of every taxi and
         # customer (and additional info maybe later on). As a JSON!
