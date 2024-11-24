@@ -90,6 +90,8 @@ const MapComponent = ({ onClickCar }) => {
   const [customerDestinationPositions, setCustomerDestinations] = useState([]);
 
 
+  const [cars, setCars] = useState([]);
+
 
   const [realTimeData, firstLoad] = useRealTimeSimilationData();
   useEffect(() => {
@@ -101,6 +103,8 @@ const MapComponent = ({ onClickCar }) => {
   
     let bookedTaxis = [];
     const freeTaxis = [];
+
+    setCars(carsPosition);
     
     carsPosition.forEach(c => {
       if (c.type === BOOKED_TAXI) {
@@ -135,12 +139,12 @@ const MapComponent = ({ onClickCar }) => {
       map.eachLayer(layer => {
         if (layer.options?.alt?.includes('car_')) {
           layer.on({
-            click: () => {
+            click: (event) => {
               const [label, idx] = layer.options.alt.split('_');
-              if (label.includes('car') && label.includes('with-customer')) {
-                onClickCar(customerWithCarsPositions[idx]);
-              } else if (label.includes('car')) {
-                onClickCar(carPositions[idx]);
+              if (label.includes('car')) {
+                  const lgt = layer.getLatLng();
+                  const car = cars.find(i => i.position[0] === lgt.lat && i.position[1] === lgt.lng);
+                  onClickCar(car);
               }
             },
           })

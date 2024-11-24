@@ -30,4 +30,13 @@ Then run `python websocket.py &` in the [`backend/` directory](./backend/).
 
 ### Start the Frontend
 
-**??? (TODO)**
+Go to the main directory which is ~/frontend
+
+Install the node_modules using `npm install`
+
+npm version >= 18
+
+Run the frontend using `npm run dev`
+
+ 
+

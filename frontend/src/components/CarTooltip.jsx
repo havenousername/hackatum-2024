@@ -1,58 +1,60 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TimeChart from "../charts/TimeChart.jsx";
-import Select from "react-select";
 import SingleSelect from "./SingleSelect.jsx";
 import closeIcon from "../assets/close.svg";
+import { faker } from "@faker-js/faker";
 
-const CarTooltip = ({ isOpen, setIsOpen }) => {
+const CarTooltip = ({ isOpen, setIsOpen, selectedCar }) => {
     const ref = useRef(null);
-    const [car] = useState({
-        id: 'randomId',
-        isAvailable: true,
-        customer: 'customerId',
-        shortSummary: 'A car had more than 400 rides with 200 people',
+
+
+    const car = {
+        id: faker.string.uuid(), 
+        isAvailable: faker.datatype.boolean(),
+        customer: faker.person.firstName(), 
+        shortSummary: faker.lorem.sentence(),
         mostImportantMetricks: {
-            availability: '90%',
-            energySpend: '30%',
+            availability: `${faker.number.int({ min: 80, max: 100 })}%`,
+            energySpend: `${faker.number.int({ min: 10, max: 50 })}%`,
         },
         metrics: {
             distance: {
-                withCustomer: '80%',
-                without: '20%'
+                withCustomer: `${faker.number.int({ min: 50, max: 90 })}%`,
+                without: `${faker.number.int({ min: 10, max: 50 })}%`,
             },
-            numberOfTrips: 499,
-            errors: 2,
-            averageTravelTime: '6min',
-            energyFootprint: '4'
-        }
-    });
+            numberOfTrips: faker.number.int({ min: 100, max: 1000 }),
+            errors: faker.number.int({ min: 0, max: 10 }),
+            averageTravelTime: `${faker.number.int({ min: 5, max: 20 })} min`,
+            energyFootprint: faker.number.int({ min: 1, max: 10 }).toString(),
+        },
+    };
 
 
     const [features] = useState(['time', 'distance']);
     const [timeframes] = useState(['hourly', 'daily']);
 
-    const [datasets] = useState({
+    const datasets = {
         time: {
             hourly: {
-                data: [10, 15, 20, 35],
+                data: Array.from({ length: 4 }, () => faker.number.int({ min: 5, max: 50 })),
                 timeLabels: ["10:30", "10:40", "10:50", "11:00"],
             },
             daily: {
-                data: [190, 105, 200, 350],
-                timeLabels: ["10:30", "10:40", "10:50", "11:00"],
+                data: Array.from({ length: 4 }, () => faker.number.int({ min: 1, max: 1000 })),
+                timeLabels: ["Sunday", "Monday", "Tuesday", "Wednesday"],
             },
         },
         distance: {
             hourly: {
-                data: [3, 40, 240, 305],
+                data: Array.from({ length: 4 }, () => faker.number.int({ min: 1, max: 100 })),
                 timeLabels: ["10:30", "10:40", "10:50", "11:00"],
             },
             daily: {
-                data: [1900, 1305, 2000, 1350],
-                timeLabels: ["10:30", "10:40", "10:50", "11:00"],
+                data: Array.from({ length: 4 }, () => faker.number.int({ min: 1000, max: 2000 })),
+                timeLabels: ["Sunday", "Monday", "Tuesday", "Wednesday"],
             },
         },
-    });
+    };
 
     const [feature, setFeature] = useState(features[0]);
     const [timeFrame, setTimeFrame] = useState(timeframes[0])
@@ -65,6 +67,9 @@ const CarTooltip = ({ isOpen, setIsOpen }) => {
     const featureValue = { value: feature, label: capitalize(feature) };
     const timeFrameValue = { value: timeFrame, label: capitalize(timeFrame) };
 
+
+    const isAvailable = selectedCar?.type  === "TAXI_DRIVING_ALONE" ? true : false;
+
     return (
         <div
          ref={ref} 
@@ -76,13 +81,13 @@ const CarTooltip = ({ isOpen, setIsOpen }) => {
          >
             <img alt="close" src={closeIcon} className="absolute right-5 top-4 w-[20px] cursor-pointer" onClick={() => setIsOpen(false)} />
             <div className="flex justify-between mb-4">
-                <h2 className="text-2xl font-bold">Car #{car.id}</h2>
-                <div className={`border font-bold border-1 px-14 py-1 ${car.isAvailable ? 'border-white' : ' border-primary-800'} rounded-xl`}>
-                    { car.isAvailable ? 'Available' : 'Busy' }
+                <h2 className="text-2xl font-bold">Car #{selectedCar?.id.slice(0, 5) + '...' ?? car.id}</h2>
+                <div className={`border font-bold border-1 px-14 py-1 ${ isAvailable ? 'border-white' : ' border-primary-800'} rounded-xl`}>
+                    { isAvailable ? 'Available' : 'Busy' }
                 </div>
             </div>
             <div className="rounded-3xl bg-[#252222] px-4 py-2 timechart-container">
-                <TimeChart {...datasets[feature][timeFrame]} />
+                {datasets[feature] && <TimeChart {...datasets[feature][timeFrame]} />}
             </div>
             <div className="flex justify-evenly my-4">
                 <SingleSelect
