@@ -95,14 +95,14 @@ const Statistics = () => {
     };
 
     return (
-        <div className="w-full pl-[6rem] h-screen relative bg-charcoal-gray">
+        <div className="w-full pl-[6rem] relative bg-charcoal-gray h-[100%] pb-6">
             <div className='flex flex-col gap-y-2'>
                 <div className="pt-[3rem] flex gap-4">
                     <h6 className='text-base'>Simulation running for</h6>
                     <span>10 min 23 sec</span>
                 </div>
                 <div className="flex">
-                    <div className="w-28 rounded text-center font-bold cursor-pointer bg-primary-800"> 
+                    <div className="w-28 rounded text-center font-bold cursor-pointer bg-primary-800">
                         <span>Stop</span>
                     </div>
                     <div className='flex ml-7 gap-4'>
@@ -115,7 +115,7 @@ const Statistics = () => {
 
                 <div className="rounded-xl bg-dark-charcoal p-8 flex flex-col gap-2">
                     <div className="border-dark">
-                        <div className='rounded-xl p-4 bg-charcoal-gray'>
+                        <div className='rounded-xl p-8 bg-charcoal-gray'>
                             <div className="h-[400px]"><BarChart data={data} /></div>
                             <div className='pl-8'>
                                 <h4 className='mt-1'>Statistics</h4>
@@ -154,9 +154,9 @@ const Statistics = () => {
                         <div className="border-dark">
                             <div className="pt-8"><PieChart /></div>
                             <h4 className='pt-14'>Fleet Statistics</h4>
-                                {statistics.fleet.map((data, index) =>
-                                    <div key={index} className='flex gap-6'> <h6>{data.name}</h6> <h6>{`${data.value} min`}</h6></div>)
-                                }
+                            {statistics.fleet.map((data, index) =>
+                                <div key={index} className='flex gap-6'> <h6>{data.name}</h6> <h6>{`${data.value} min`}</h6></div>)
+                            }
                         </div>
                     </div>
                     <div className="rounded-xl p-8 bg-charcoal-gray ">
@@ -170,13 +170,29 @@ const Statistics = () => {
 
 
 
-                <div className="rounded-xl bg-dark-charcoal ">
-                    <div className="border-dark">
-                        <div className="">Item 1</div>
+                <div className='grid grid-rows-2 gap-20 rounded-xl p-8 bg-dark-charcoal'>
+                    <div className="rounded-xl p-8 bg-charcoal-gray ">
+                        <div className="border-dark">
+                            <div className='text-center'>
+                                <h4 className="">Operational</h4>
+                                <h1>4%</h1>
+                                <h4>Error Rate per Order</h4>
+                                <h4 className='pt-8'>Your error rate in within norm</h4>
+                            </div>
+                        </div>
                     </div>
-                    <div className="border-dark">
-                        <div className="">Item 2</div>
+                    <div className="rounded-xl p-8 bg-charcoal-gray ">
+                        <div className="border-dark">
+                            <div className='text-center'>
+                                <h4 className="">General</h4>
+                                <h3>12K</h3>
+                                <h4>People Served</h4>
+                                <h3>129K</h3>
+                                <h4>Kilometers by fleet</h4>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
 

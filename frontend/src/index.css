@@ -20,6 +20,14 @@
         color: rgba(255,255,255);
         font-size: 1rem;
     }
+    h1 {
+        color: rgba(255,255,255,0.70);
+        font-size: 9rem; 
+    }
+    h3 {
+        color: rgba(255,255,255,0.70);
+        font-size: 5rem;  
+    }
 
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {

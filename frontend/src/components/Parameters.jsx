@@ -3,7 +3,8 @@ import Slider from "./Slider.jsx";
 import shrinkIcon from "../assets/shrink.svg"
 import NumberInput from "./NumberInput.jsx";
 
-const Parameters = ({ position }) => {
+
+const Parameters = ({ position, isExpanded, setIsExpanded}) => {
     const [time, setTime] = useState(50);
     const [distance, setDistance] = useState(50);
     const [revenue, setRevenue] = useState(50);
@@ -13,7 +14,7 @@ const Parameters = ({ position }) => {
     const [pricePerKm, setPricePerKm] = useState({ value: 1, placeholder: '0', label: 'euro'  });
     const [pricePerMin, setPricePerMin] = useState({ value: 1, placeholder: '0', label: 'euro'  });
 
-    const [isExpanded, setIsExpanded] = useState(true);
+    
     
     return (
         <>
