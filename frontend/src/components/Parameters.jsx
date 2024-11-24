@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Slider from "./Slider.jsx";
 import shrinkIcon from "../assets/shrink.svg"
 import NumberInput from "./NumberInput.jsx";
+import useBackendConnection from "../api/useBackendConnection.jsx";
 
 
 const Parameters = ({ position, isExpanded, setIsExpanded}) => {
+    const backendConnection = useBackendConnection();
     const [time, setTime] = useState(50);
     const [distance, setDistance] = useState(50);
     const [revenue, setRevenue] = useState(50);
@@ -14,7 +16,12 @@ const Parameters = ({ position, isExpanded, setIsExpanded}) => {
     const [pricePerKm, setPricePerKm] = useState({ value: 1, placeholder: '0', label: 'euro'  });
     const [pricePerMin, setPricePerMin] = useState({ value: 1, placeholder: '0', label: 'euro'  });
 
-    
+    const parameters = { time, distance, revenue, energy };
+
+
+    useEffect(() => {
+        backendConnection.sendJsonMessage({ update: parameters })
+    }, [time]);
     
     return (
         <>

@@ -1,0 +1,13 @@
+{
+    "weights": {
+        "duration": 1.0,
+        "distance": 1.0,
+        "energyConsumption": 0.0,
+        "renenue": 1.0
+    },
+    "financialConstraints": {
+        "startPrice": 4.0,
+        "pricePerKm": 1.0,
+        "pricePerMin": 1.0
+    }
+}

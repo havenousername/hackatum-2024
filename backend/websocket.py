@@ -3,6 +3,7 @@ import asyncio
 import websockets
 from websockets.asyncio.server import serve
 import json
+from jsondata_adapter import JsonDataAdapter
 
 from main import create_scenario_with_api_call, calculate_mapping, Simulation
 
@@ -12,6 +13,7 @@ UPDATE_INTERVAL = 0.1
 
 class WebSimulationServer:
     def __init__(self):
+        self.parameters = JsonDataAdapter('./parameters.json')
         self.simulation_step = 0
         self.simulations = []
         self.current_simulation = None
@@ -43,6 +45,17 @@ class WebSimulationServer:
             return None
         return self.current_simulation.customer_pos_to_des(self.simulation_step)
 
+
+    def get_customer_route(self):
+        if not self.current_simulation:
+            return None 
+        return self.current_simulation.remaining_current_waypoints_customers()
+    
+    def get_cars_route(self):
+        if not self.current_simulation:
+            return None 
+        # return self.current_simulation.remaining_current_waypoints_taxis()
+
     def get_cars_position(self):
         if not self.current_simulation:
             return None
@@ -50,15 +63,22 @@ class WebSimulationServer:
 
     def subscribe_to_customer_position(self):
         self.pipeline['customerPosition'] = self.get_customers_position
+        self.pipeline['customerRoute'] = self.get_customer_route
 
     def unsubscribe_from_customer_position(self):
         self.pipeline.pop('customerPosition', None)
+        self.pipeline.pop('customerRoute', None)
 
     def subscribe_to_cars_position(self):
         self.pipeline['carsPosition'] = self.get_cars_position
+        self.pipeline['carsRoute'] = self.get_cars_route
+
+    def subscribe_initial_data(self):
+        self.pipeline['initialData'] = self.parameters.get_all
 
     def unsubscribe_from_cars_position(self):
         self.pipeline.pop('carsPosition', None)
+        self.pipeline.pop('carsRoute')
 
     async def periodic_update(self, websocket):
         while True:
@@ -90,7 +110,8 @@ class WebSimulationServer:
                 self.unsubscribe_from_customer_position()
             elif json_message.get('unsubscribeFrom') == 'carPosition':
                 self.unsubscribe_from_cars_position()
-
+            elif json_message.get('subscribeTo') == 'initialData':
+                self.subscribe_initial_data()
         except Exception as e:
             print(f"Error handling message: {e}")
 

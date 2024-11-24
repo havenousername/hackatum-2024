@@ -25,7 +25,6 @@ def normalize(x, lower, upper):
     return (x - lower) / (upper - lower)
 
 class Weights:
-
     def __init__(self, distance, duration, revenue, energy_consumption) -> None:
         self.distance = distance
         self.duration = duration
