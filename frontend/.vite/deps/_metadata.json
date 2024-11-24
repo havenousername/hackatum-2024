@@ -1,8 +1,97 @@
 {
-  "hash": "f5ab3377",
+  "hash": "98c6e736",
   "configHash": "b71ced35",
-  "lockfileHash": "ee08cff8",
-  "browserHash": "4cd80d43",
-  "optimized": {},
-  "chunks": {}
+  "lockfileHash": "b6981899",
+  "browserHash": "efb2b139",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "e29cf378",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "ece0e91f",
+      "needsInterop": true
+    },
+    "react-router": {
+      "src": "../../node_modules/react-router/dist/development/index.mjs",
+      "file": "react-router.js",
+      "fileHash": "84c843fc",
+      "needsInterop": false
+    },
+    "@faker-js/faker": {
+      "src": "../../node_modules/@faker-js/faker/dist/index.js",
+      "file": "@faker-js_faker.js",
+      "fileHash": "43670ff7",
+      "needsInterop": false
+    },
+    "react-select": {
+      "src": "../../node_modules/react-select/dist/react-select.esm.js",
+      "file": "react-select.js",
+      "fileHash": "f53893ac",
+      "needsInterop": false
+    },
+    "react-chartjs-2": {
+      "src": "../../node_modules/react-chartjs-2/dist/index.js",
+      "file": "react-chartjs-2.js",
+      "fileHash": "ed7995f4",
+      "needsInterop": false
+    },
+    "chart.js": {
+      "src": "../../node_modules/chart.js/dist/chart.js",
+      "file": "chart__js.js",
+      "fileHash": "74b9347f",
+      "needsInterop": false
+    },
+    "chartjs-adapter-date-fns": {
+      "src": "../../node_modules/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.esm.js",
+      "file": "chartjs-adapter-date-fns.js",
+      "fileHash": "24afbd9b",
+      "needsInterop": false
+    },
+    "react-leaflet": {
+      "src": "../../node_modules/react-leaflet/lib/index.js",
+      "file": "react-leaflet.js",
+      "fileHash": "6a8be79a",
+      "needsInterop": false
+    },
+    "leaflet": {
+      "src": "../../node_modules/leaflet/dist/leaflet-src.js",
+      "file": "leaflet.js",
+      "fileHash": "19513a08",
+      "needsInterop": true
+    },
+    "react-range-slider-input": {
+      "src": "../../node_modules/react-range-slider-input/dist/index.js",
+      "file": "react-range-slider-input.js",
+      "fileHash": "dc87ed6b",
+      "needsInterop": true
+    },
+    "react-use-websocket": {
+      "src": "../../node_modules/react-use-websocket/dist/index.js",
+      "file": "react-use-websocket.js",
+      "fileHash": "75b2df8e",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-CXRN6EGV": {
+      "file": "chunk-CXRN6EGV.js"
+    },
+    "chunk-UHINIFCJ": {
+      "file": "chunk-UHINIFCJ.js"
+    },
+    "chunk-M7GWWOMS": {
+      "file": "chunk-M7GWWOMS.js"
+    },
+    "chunk-W4EHDCLL": {
+      "file": "chunk-W4EHDCLL.js"
+    },
+    "chunk-EWTE5DHJ": {
+      "file": "chunk-EWTE5DHJ.js"
+    }
+  }
 }

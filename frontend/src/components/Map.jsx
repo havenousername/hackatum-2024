@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 import LeafletListeners from './LeafletListeners';
-import carWithPersonIconSource from "../assets/car-light-with-person.svg"
-import carIconSource from "../assets/car-light.svg"
+import carWithPersonIconSource from "../assets/car-with-customer.svg"
+import carIconSource from "../assets/car-without-customer.svg"
 import destinationIconSource from "../assets/destination-light.svg"
 import customerIconSource from '../assets/person-light.svg'
 import { Icon } from 'leaflet';

@@ -3,6 +3,7 @@ import Parameters from '../components/Parameters';
 import MapComponent from '../components/Map';
 import CarTooltip from '../components/CarTooltip';
 import 'leaflet/dist/leaflet.css';
+import Logo from '../assets/logo.svg?react'
 import {useRealTimeSimulation} from "../api/useBackendConnection";
 
 
@@ -10,6 +11,7 @@ function Home() {
   const [parametersPosition] = useState({ bottom: '5%', left: '5%' });
   const [isOpen, setIsOpen] = useState(true);
   const realTimeSimulation = useRealTimeSimulation();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     realTimeSimulation.createScenario(5, 11);
