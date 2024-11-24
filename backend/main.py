@@ -38,6 +38,9 @@ if __name__ == '__main__':
     vehicles, customers, mapping = calculate_mapping(scenario_id)
 
     simulation = Simulation(vehicles, customers, mapping)
-    print(simulation.state(4000))
+    print(simulation.state(4500))
+    print(simulation.state(5000))
+    print(simulation.state(5500))
+    print(simulation.state(6000))
     for taxi in vehicles:
         print(simulation.taxi_finish_time(taxi))

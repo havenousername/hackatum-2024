@@ -123,8 +123,8 @@ class Simulation():
         return ret_list
 
     def taxi_in_use(self, taxi, t):
-        i, _, _ = self.indexed_taxi_route(taxi, t)
-        return i % 2 == 1
+        current_route, _ = self.taxi_route(taxi, t)
+        return current_route in self.customer_routes.values()
 
     def used_taxis(self, t):
         used = []
