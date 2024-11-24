@@ -107,6 +107,8 @@ def weighted_cost_function(taxi_coord, customer_coord, destination_coord,
             customer_coord=customer_coord, destination_coord=destination_coord)
     MAX_REVENUE = revenue_cost(constant_fee, fee_per_km, fee_per_min,
             duration_and_distance={'duration': MAX_DURATION, 'distance': MAX_DISTANCE})
+    if MAX_REVENUE == 0:
+        MAX_REVENUE = 1
     revenue = normalize(revenue, constant_fee, MAX_REVENUE)
     # TODO: Implement energy consumption cost
     energy_consumption = 0
