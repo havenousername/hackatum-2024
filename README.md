@@ -15,6 +15,10 @@ Run `docker-compose up -d` in the repositories root directory.
 Run `./setup.sh` in the [`openroutesystem/` directory](./openroutesystem/).
 This will download the Oberbayern map dataset.
 
+_If you are using a non-unix OS, you might have to follow the steps in the_
+_[`setup.sh`](./openrouteservice/setup.sh) on your own, i.e. make directories,_
+_copy the config and download the dataset at the provided link._
+
 Then run `docker-compose up -d` in the [`openroutesystem/` directory](./openroutesystem/)
 and **wait a few minutes, until the routing graph has fully compiled**
 (it is compiling as long as there is a file called
@@ -37,6 +41,3 @@ Install the node_modules using `npm install`
 npm version >= 18
 
 Run the frontend using `npm run dev`
-
- 
-
