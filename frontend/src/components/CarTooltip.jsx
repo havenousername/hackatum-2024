@@ -9,12 +9,12 @@ const CarTooltip = ({ isOpen, setIsOpen, selectedCar }) => {
 
 
     const car = {
-        id: faker.string.uuid(), // Use faker.string.uuid() for unique IDs
+        id: faker.string.uuid(), 
         isAvailable: faker.datatype.boolean(),
-        customer: faker.person.firstName(), // Updated API for names
+        customer: faker.person.firstName(), 
         shortSummary: faker.lorem.sentence(),
         mostImportantMetricks: {
-            availability: `${faker.number.int({ min: 80, max: 100 })}%`, // Updated for numbers
+            availability: `${faker.number.int({ min: 80, max: 100 })}%`,
             energySpend: `${faker.number.int({ min: 10, max: 50 })}%`,
         },
         metrics: {
