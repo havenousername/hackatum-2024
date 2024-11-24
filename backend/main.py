@@ -43,4 +43,7 @@ if __name__ == '__main__':
     print(simulation.state(5500))
     print(simulation.state(6000))
     for taxi in vehicles:
-        print(simulation.taxi_finish_time(taxi))
+        print(simulation._taxi_finish_time(taxi))
+    print(f'Average wait time: {simulation.average_wait_time()}')
+    print(f'Average trip duration: {simulation.average_trip_duration()}')
+    print(f'Average total customer time: {simulation.average_total_customer_time()}')

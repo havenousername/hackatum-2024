@@ -22,7 +22,7 @@ class Route:
 
         # ? Do we even need this cast?
         self.duration = int(self.route['features'][0]['properties']['summary']['duration'])
-        self.distance = self.route['features'][0]['properties']['summary']['distance']
+        self.distance = float(self.route['features'][0]['properties']['summary']['distance'])
         self.waypoints = [(lat, lon) for lon, lat in self.route['features'][0]['geometry']['coordinates']]
         self.waypoint_lookup_table = dict()
         if do_preprocessing:
