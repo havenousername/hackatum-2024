@@ -22,7 +22,7 @@ jobs:
       
       - name: Build and Push docker image to the registry 
         working-directory: ${{ github.workspace }} 
-        run: |
-        docker-compose build
-        docker-compose push
+        run: >-
+          docker-compose build
+          docker-compose push
 
