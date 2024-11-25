@@ -4,6 +4,9 @@ env:
   TAG:  ${{github.ref_name}}
 
 on: 
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs: 
