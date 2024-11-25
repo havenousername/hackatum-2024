@@ -1,5 +1,5 @@
 
-const URL = 'ws://localhost:9876';
+const URL = import.meta.env.VITE_SOCKET_URL;
 // const URL = 'https://echo.websocket.org/';
 
 

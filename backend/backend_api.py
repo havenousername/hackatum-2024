@@ -3,10 +3,13 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 from uuid import UUID
 from schemas import *
+from dotenv import load_dotenv
+import os 
 
-BASE_URL = "http://localhost:8080"
 
+load_dotenv(dotenv_path='.env')
 
+BASE_URL = os.getenv('BASE_URL')
 
 ######   GET METHODS   ######
 
@@ -114,7 +117,7 @@ def create_scenario(number_of_vehicles: int, number_of_customers: int) -> Scenar
 
 
 
-SCENARIO_URL = "http://localhost:8090"  # Your FastAPI server URL
+SCENARIO_URL = os.getenv('SCENARIO_URL')  # Your FastAPI server URL
 
 
 def get_scenario(scenario_id: str) -> Scenario:
