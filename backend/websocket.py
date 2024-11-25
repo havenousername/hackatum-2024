@@ -6,9 +6,14 @@ import json
 from jsondata_adapter import JsonDataAdapter
 
 from main import create_scenario_with_api_call, calculate_mapping, Simulation
+from dotenv import load_dotenv
+import os 
 
-PORT = 9876
-UPDATE_INTERVAL = 0.4
+
+load_dotenv(dotenv_path='.env')
+
+PORT = os.getenv('SOCKET_PORT')
+UPDATE_INTERVAL = os.getenv('UPDATE_INTERVAL')
 
 
 class WebSimulationServer:
