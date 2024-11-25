@@ -4,11 +4,6 @@ import math
 from jsondata_adapter import JsonDataAdapter
 from cost_functions import Weights, weighted_cost_function
 
-# Cost function provided (replace your distance/time/energy/revenue calculation)
-def cost_function(x1, y1, x2, y2):
-    return math.hypot(x1 - x2, y1 - y2)
-
-
 def mip_complete_route_assignment(scenario_id: str, weights=None,
         constant_fee=None, fee_per_km=None, fee_per_min=None):
     if weights == None:
