@@ -4,12 +4,20 @@ from typing import List, Optional
 from uuid import UUID
 from schemas import *
 from dotenv import load_dotenv
-import os 
+import os
+import logging
 
 
 load_dotenv(dotenv_path='.env')
 
 BASE_URL = os.getenv('BASE_URL')
+
+logging.basicConfig(
+    level=logging.INFO,  # Use DEBUG for more detail
+    format="%(levelname)s:     %(message)s"
+)
+
+logger = logging.getLogger(__name__)
 
 ######   GET METHODS   ######
 
@@ -100,10 +108,11 @@ def create_scenario(number_of_vehicles: int, number_of_customers: int) -> Scenar
     """
     url = f"{BASE_URL}/scenario/create?numberOfVehicles={number_of_vehicles}&numberOfCustomers={number_of_customers}"
     response = requests.post(url)
+
     if response.status_code == 200:
         return Scenario.model_validate(response.json())  # Parse JSON into Scenario model
     else:
-        raise Exception(f"Error {response.status_code}: {response.json()}")
+        raise Exception(f"Error {response.status_code}: {response}")
 
 
 

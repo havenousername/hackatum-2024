@@ -1,9 +1,19 @@
 import requests
 from cost_functions import L2_distance
 import math
+import os
+from dotenv import load_dotenv
+import logging
 
+load_dotenv(dotenv_path='.env')
+ORS_URL = os.getenv('ORS_URL')
 
-ORS_PORT = 12345
+logging.basicConfig(
+    level=logging.INFO,  # Use DEBUG for more detail
+    format="%(levelname)s:     %(message)s"
+)
+
+logger = logging.getLogger(__name__)
 
 
 class Route:
@@ -13,8 +23,9 @@ class Route:
         lat1, lon1 = destination
         self.origin = origin
         self.destination = destination
-        url = f'http://localhost:{ORS_PORT}/ors/v2/directions/driving-car?start={lon0},{lat0}&end={lon1},{lat1}'
+        url = f'{ORS_URL}/ors/v2/directions/driving-car?start={lon0},{lat0}&end={lon1},{lat1}'
         response = requests.get(url)
+        logger.debug("The url of the ors is " + url)
 
         if response.status_code == 200:
             self.route = response.json()

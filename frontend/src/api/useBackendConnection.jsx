@@ -1,5 +1,5 @@
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { useState, useEffect, useCallback } from 'react';
+import {useState, useEffect, useCallback, useMemo, useRef} from 'react';
 
 const URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -7,15 +7,27 @@ const URL = import.meta.env.VITE_SOCKET_URL;
 const useBackendConnection = () => {
     const [socketUrl] = useState(URL);
     const [messageHistory, setMessageHistory] = useState([]);
-    const { sendJsonMessage, lastJsonMessage, close } = useWebSocket(socketUrl, {
+    const [counter, setCounter] = useState(0);
+    const { sendJsonMessage, close, lastJsonMessage } = useWebSocket(socketUrl, {
         onOpen: () => console.log('Connected to web socket'),
-        onClose: () => console.log('Disconnected from WebSocket server'),
+        onClose: (reason) => console.log('Disconnected from WebSocket server'),
         onMessage: (message) => {
-            setMessageHistory((prevHistory) => [...prevHistory, message]);
+                // const data = JSON.parse(message.data);
+                // setMessageHistory((prevHistory) => [...prevHistory, data]);
+                console.log('Received new message from WebSocket server');
         },
         onError: (error) => console.log('WebSocket error:', error),
     });
 
+
+    const lastMessageRef = useRef(null);
+
+    useEffect(() => {
+        if (lastJsonMessage) {
+            lastMessageRef.current = lastJsonMessage;
+            setCounter(counter + 1);
+        }
+    }, [lastJsonMessage]);
 
     const createSubscription = useCallback((subscribeTo) => {
         sendJsonMessage({ subscribeTo });
@@ -25,7 +37,8 @@ const useBackendConnection = () => {
         sendJsonMessage({ unsubscribeFrom });
     }, []);
 
-    return { createSubscription, unsubscribe, messageHistory, lastJsonMessage, close, sendJsonMessage };
+
+    return { createSubscription, unsubscribe, messageHistory, lastJsonMessage, lastMessageRef, close, sendJsonMessage, counter };
 };
 
 

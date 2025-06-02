@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 
 import { useRealTimeSimulation } from "../api/useBackendConnection";
 import NumberInput from "./NumberInput";
+import {useRealTime} from "../context/RealTimeDataContext.jsx";
 
 
 
 const Simulation = () => {
-    const { lastJsonMessage, createScenario, createSubscription, stopScenario }= useRealTimeSimulation();
+    const { lastJsonMessage, createScenario, createSubscription, stopScenario }= useRealTime();
     const [numberOfCars, setNumberOfCars] = useState(5);
     const [numberOfCustomers, setNumberOfCustomers] = useState(11);
 

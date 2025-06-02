@@ -1,6 +1,13 @@
 import math
 import requests
 import time
+import os
+
+from dotenv import load_dotenv
+import logging
+
+load_dotenv(dotenv_path='.env')
+ORS_URL = os.getenv('ORS_URL')
 
 
 DO_L2_TIME_MEASUREMENTS = False
@@ -13,7 +20,7 @@ MAP_CENTER = (48.137334263121744,11.575138710691016)
 MUNICH_LONG_DEGREE_SCALE = math.cos(MAP_CENTER[0])
 
 # The port for the openrouteservice API
-ORS_PORT = 12345
+
 
 # Default values used for normalization, just some guesses from edge to edge of the map
 MIN_DISTANCE = 0
@@ -78,7 +85,7 @@ def L2_distance(coord0, coord1, fast=True):
 def realistic_duration_and_distance(coord0, coord1):
     lat0, lon0 = coord0
     lat1, lon1 = coord1
-    url = f'http://localhost:{ORS_PORT}/ors/v2/directions/driving-car?start={lon0},{lat0}&end={lon1},{lat1}'
+    url = f'{ORS_URL}/ors/v2/directions/driving-car?start={lon0},{lat0}&end={lon1},{lat1}'
     response = requests.get(url)
     if response.status_code == 200:
         # ? Is this always the correct access? Hopefully, this won't break...

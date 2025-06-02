@@ -2,3 +2,6 @@ websockets
 requests
 pydantic
 PuLP
+python-dotenv
+uvicorn
+fastapi

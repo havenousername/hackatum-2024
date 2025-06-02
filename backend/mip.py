@@ -3,6 +3,16 @@ from backend_api import get_scenario
 import math
 from jsondata_adapter import JsonDataAdapter
 from cost_functions import Weights, weighted_cost_function
+import logging
+
+# === Logging Setup ===
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s:     %(message)s"
+)
+logger = logging.getLogger(__name__)
+
+
 
 def mip_complete_route_assignment(scenario_id: str, weights=None,
         constant_fee=None, fee_per_km=None, fee_per_min=None):
@@ -93,7 +103,11 @@ def mip_complete_route_assignment(scenario_id: str, weights=None,
                     print(f"Assigning Vehicle {v.id} to Customer {c.id}.")
                     assignments[v.id].append(c.id)
                     v.coordX, v.coordY = c.destinationX, c.destinationY
-            
+
+        logger.debug("Final mapping result:")
+        for k, v in assignments.items():
+            logger.debug(f"  Taxi {k} → Customers {v}")
+
         return assignments
 
     except Exception as e:

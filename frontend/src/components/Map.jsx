@@ -8,6 +8,8 @@ import customerIconSource from '../assets/person-light.svg'
 import { Icon } from 'leaflet';
 import '../assets/overlay.css';
 import {useRealTimeSimulation} from "../api/useBackendConnection";
+import {lastId} from "leaflet/src/core/Util.js";
+import {useRealTime} from "../context/RealTimeDataContext.jsx";
 
 const customerIcon = new Icon({
   iconUrl: customerIconSource, 
@@ -48,14 +50,6 @@ function generateRandomPoint([lat, lon], radius) {
 
 const ONE_KM = 1000;
 
-
-const useRealTimeSimilationData = () => {
-  const realTimeSimulation = useRealTimeSimulation();
-  const firstLoad = realTimeSimulation.messageHistory.at(-2) && realTimeSimulation.messageHistory.at(-2) === null;
-
-  return [realTimeSimulation.lastJsonMessage, firstLoad];
-}
-
 const findCentralPoint = (customers, cars) => {
 
   const customerPoints = customers.map(c => c.position);
@@ -84,14 +78,13 @@ const MapComponent = ({ onClickCar }) => {
 
 
   const [cars, setCars] = useState([]);
+  const { lastJsonMessage: realTimeData } = useRealTime();
 
-
-  const [realTimeData, firstLoad] = useRealTimeSimilationData();
   useEffect(() => {
     if (!realTimeData || !realTimeData.carsPosition) {
       return;
     }
-  
+
     const { carsPosition, customerPosition } = realTimeData;
   
     let bookedTaxis = [];

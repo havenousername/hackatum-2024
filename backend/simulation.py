@@ -1,7 +1,14 @@
 import json
+import logging
 
 from routing import Route
 
+logging.basicConfig(
+    level=logging.INFO,  # Use DEBUG for more detail
+    format="%(levelname)s:     %(message)s"
+)
+
+logger = logging.getLogger(__name__)
 
 class Simulation():
 
@@ -15,11 +22,16 @@ class Simulation():
         self.taxi_mapping = taxi_mapping
         self.customer_routes = self._precalculate_customer_routes()
         self.taxi_routes = self._precalculate_taxi_routes()
+        logger.debug("Taxis are {}".format(taxis))
+        logger.debug("Customers are {}".format(customers))
 
     def _precalculate_taxi_routes(self):
-        # ? Is the following implemented correctly: Include customer routes here!
         taxi_routes = dict()
         for taxi in self.taxis:
+            logger.debug("Taxi is {}".format(taxi))
+            if taxi is None or taxi.id not in self.taxi_mapping:
+                logger.warning(f"Warning: Taxi ID {taxi} not found in mapping.")
+                continue
             t = 0
             origin = (taxi.coordX, taxi.coordY)
             this_taxi_routes = dict()
